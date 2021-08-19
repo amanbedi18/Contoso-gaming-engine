@@ -1,8 +1,5 @@
 name: CI Build
 on:
-  push:
-    branches:
-    - aman/locateplayers
   workflow_dispatch:
   pull_request :
     branches:
@@ -13,7 +10,7 @@ env:
   SLN_PATH_API: src
 
 jobs:
-  build-and-deploy:
+  build-api:
     runs-on: windows-latest
     steps:
     - uses: actions/checkout@v2
@@ -35,7 +32,7 @@ jobs:
       run: dotnet build ${{ env.SLN_PATH_API }} --no-restore
 
     - name: Test API
-      run: dotnet test ${{ env.SLN_PATH_API }} --logger:trx --results-directory ../TestResults "/p:CollectCoverage=true" "/p:CoverletOutput=../TestResults/" "/p:MergeWith=../TestResults/coverage.json" "/p:CoverletOutputFormat=\"json,cobertura\""  
+      run: dotnet test ${{ env.SLN_PATH_API }} --results-directory ../TestResults "/p:CollectCoverage=true" "/p:CoverletOutput=../TestResults/" "/p:CoverletOutputFormat=\"json,cobertura\""  
 
     - name: dotnet-tests-report-API
       uses: zyborg/dotnet-tests-report@v1.4.4
