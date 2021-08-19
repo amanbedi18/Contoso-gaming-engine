@@ -2,27 +2,43 @@
 using Contoso.Gaming.Engine.API.Services.Interfaces;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace Contoso.Gaming.Engine.API.Services
 {
     public class GraphService : IGraphService
     {
-        public List<string> GetPathsAndWeights(Dictionary<string, List<Edge>> graph, string src, string dest)
+        public List<string> GetAllPathsWithWeights(Dictionary<string, List<Edge>> graph, string src, string dest)
         {
             var paths = new List<string>();
-            getAllPathsAndWeights(graph, src, dest, new HashSet<string>(), paths, src, 0);
+            getAllPathsWithWeights(graph, src, dest, new HashSet<string>(), paths, src, 0);
             return paths;
         }
 
+        public List<string> GetAllPathsWithWeightsviaLandmarks(Dictionary<string, List<Edge>> graph, string src, string dest, List<string> landmarks)
+        {
+            var paths = new List<string>();
+            getPathsAndWeightsviaLandmarks(graph, src, dest, new HashSet<string>(), paths, src, 0, landmarks, 0);
+            return paths;
+        }
+
+        public List<string> GetAllPathsWithWeightsviaLandmarksandHops(Dictionary<string, List<Edge>> graph, string src, string dest, int maxHops)
+        {
+            var paths = new List<string>();
+            getPathsAndWeightsWithGivenHops(graph, src, dest, new HashSet<string>(), paths, src, 0, 0, maxHops);
+            return paths;
+        }
+
+        public bool HasPathBetweenVertices(Dictionary<string, List<Edge>> graph, string src, string dest)
+        {
+            return hasPathBetweenVerices(graph, src, dest, new HashSet<string>());
+        }
 
         //1.	The distance between landmarks via the route A-B-C.
         //2.	The distance between landmarks via the route A-E-B-C-D.
         //3.	The distance between landmarks via the route A-E-D.
-        private void getPathsAndWeightsviaLandmarks(Dictionary<string, List<Edge>> graph, string src, string dest, HashSet<string> isVisited, List<string> allPaths, string currentPath, int weightSoFar, string[] pt, int idx)
+        private void getPathsAndWeightsviaLandmarks(Dictionary<string, List<Edge>> graph, string src, string dest, HashSet<string> isVisited, List<string> allPaths, string currentPath, int weightSoFar, List<string> landmarks, int idx)
         {
-            if (src == dest && idx == pt.Length)
+            if (src == dest && idx == landmarks.Count)
             {
                 Console.WriteLine(currentPath);
                 allPaths.Add(currentPath + "@" + weightSoFar);
@@ -34,10 +50,10 @@ namespace Contoso.Gaming.Engine.API.Services
             {
                 if (isVisited.Contains(edge.Nbr) == false)
                 {
-                    if (edge.Nbr != dest && idx < pt.Length && edge.Nbr != pt[idx]) continue;
+                    if (edge.Nbr != dest && idx < landmarks.Count && edge.Nbr != landmarks[idx]) continue;
                     else
                     {
-                        getPathsAndWeightsviaLandmarks(graph, edge.Nbr, dest, isVisited, allPaths, currentPath + edge.Nbr.ToString(), weightSoFar + edge.Wt, pt, idx + 1);
+                        getPathsAndWeightsviaLandmarks(graph, edge.Nbr, dest, isVisited, allPaths, currentPath + edge.Nbr.ToString(), weightSoFar + edge.Wt, landmarks, idx + 1);
                     }
                 }
             }
@@ -46,7 +62,8 @@ namespace Contoso.Gaming.Engine.API.Services
         }
 
         // find all paths between A & C
-        private void getAllPathsAndWeights(Dictionary<string, List<Edge>> graph, string src, string dest, HashSet<string> isVisited, List<string> allPaths, string currentPath, int weightSoFar)
+        // limitation of recursive call
+        private void getAllPathsWithWeights(Dictionary<string, List<Edge>> graph, string src, string dest, HashSet<string> isVisited, List<string> allPaths, string currentPath, int weightSoFar)
         {
             if (src == dest)
             {
@@ -60,7 +77,7 @@ namespace Contoso.Gaming.Engine.API.Services
             {
                 if (!isVisited.Contains(edge.Nbr))
                 {
-                    getAllPathsAndWeights(graph, edge.Nbr, dest, isVisited, allPaths, currentPath + edge.Nbr.ToString(), weightSoFar + edge.Wt);
+                    getAllPathsWithWeights(graph, edge.Nbr, dest, isVisited, allPaths, currentPath + edge.Nbr.ToString(), weightSoFar + edge.Wt);
 
                 }
             }

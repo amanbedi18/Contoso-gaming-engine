@@ -1,25 +1,20 @@
 using Contoso.Gaming.Engine.API.Exceptions;
+using Contoso.Gaming.Engine.API.Services;
+using Contoso.Gaming.Engine.API.Services.Interfaces;
 using Contoso.Gaming.Engine.API.Setup;
 using Contoso.Gaming.Engine.API.Utilities;
 using Hellang.Middleware.ProblemDetails;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
-using Microsoft.OpenApi.Models;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Contoso.Gaming.Engine.API
 {
+    [ExcludeFromCodeCoverage]
     public class Startup
     {
         public Startup(IConfiguration configuration)
@@ -43,7 +38,9 @@ namespace Contoso.Gaming.Engine.API
             services.ConfigureProblemDetailsMiddleware(this.CurrentEnvironment);
             services.AddApplicationInsightsTelemetry(Configuration["APPINSIGHTS_CONNECTIONSTRING"]);
 
-            //services.AddScoped(typeof(IAppMetaDataManager), typeof(AppMetaDataManager));
+            services.AddSingleton<IGraphService, GraphService>();
+            // transient == scope?
+            services.AddScoped<IPlayersLocatorService, PlayersLocatorService>();
 
             services.AddControllers().AddNewtonsoftJson();
 

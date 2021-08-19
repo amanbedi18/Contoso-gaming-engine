@@ -1,10 +1,10 @@
 ﻿using Contoso.Gaming.Engine.API.Entities;
+using Contoso.Gaming.Engine.API.Exceptions;
 using Contoso.Gaming.Engine.API.Services.Interfaces;
+using Contoso.Gaming.Engine.API.Utilities;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
@@ -12,16 +12,16 @@ using System.Threading.Tasks;
 namespace Contoso.Gaming.Engine.API.Controllers.V1
 {
     [Produces("application/json")]
-    [Route("api/v{version:apiVersion}/[controller]")]
+    [Route("api/v{version:apiVersion}/locateplayers")]
     [ApiVersion("1.0")]
     [ApiController]
     [ApiExplorerSettings(GroupName = "locateplayers")]
-    public class LocatePlayersController : ControllerBase
+    public class LocatePlayersOnMapController : ControllerBase
     {
         private readonly IPlayersLocatorService playersLocatorService;
-        private readonly ILogger<LocatePlayersController> logger;
+        private readonly ILogger<LocatePlayersOnMapController> logger;
 
-        public LocatePlayersController(IPlayersLocatorService playersLocatorService, ILogger<LocatePlayersController> logger)
+        public LocatePlayersOnMapController(IPlayersLocatorService playersLocatorService, ILogger<LocatePlayersOnMapController> logger)
         {
             this.playersLocatorService = playersLocatorService;
             this.logger = logger;
@@ -33,6 +33,7 @@ namespace Contoso.Gaming.Engine.API.Controllers.V1
         /// <remarks>
         /// Sample request:
         /// 
+        /// // change locateplayers to routecontroller, controller name should not be in the route
         ///     GET /api/v1/locateplayers/{source}/{destination}
         /// </remarks>
         /// <param name="source">The source id of the player.</param>
@@ -44,14 +45,12 @@ namespace Contoso.Gaming.Engine.API.Controllers.V1
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> GetAllRoutes([FromRoute][Required] string source, [FromRoute][Required] string destination)
         {
-            // source destination check
-
             var routes = await this.playersLocatorService.FindAllRoutes(source, destination).ConfigureAwait(false);
 
-            //if (appMetaDataStore == null)
-            //{
-            //    throw new MetaDataStoreNotFoundException(title: "Metadata not found", instance: "id", detail: "Metadata is not present", additionalInfo: APIMessageConstant.notfound);
-            //}
+            if (!routes.Any())
+            {
+                throw new NotFoundException(title: "Path not found", instance: this.HttpContext.TraceIdentifier, detail: $"No path found between {source} & {destination}", additionalInfo: APIMessageConstant.PathNotFoundMessage);
+            }
 
             return await Task.FromResult(this.Ok(routes));
         }
@@ -82,7 +81,14 @@ namespace Contoso.Gaming.Engine.API.Controllers.V1
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> FindRoutes(RouteRequestDetails routeRequestDetails)
         {
-            return await Task.FromResult(this.Ok(new { message = "Executed successfully." }));
+            var routes = await this.playersLocatorService.FindRoutesAlongLandmarks(routeRequestDetails).ConfigureAwait(false);
+
+            if (!routes.Any())
+            {
+                throw new NotFoundException(title: "Path not found", instance: this.HttpContext.TraceIdentifier, detail: $"No path found between {routeRequestDetails.Source} & {routeRequestDetails.Destination} via given landmarks and hops.", additionalInfo: APIMessageConstant.PathNotFoundMessage);
+            }
+
+            return await Task.FromResult(this.Ok(routes));
         }
     }
 }

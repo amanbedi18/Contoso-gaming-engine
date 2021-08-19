@@ -8,6 +8,12 @@ namespace Contoso.Gaming.Engine.API.Services.Interfaces
 {
     public interface IGraphService
     {
-        List<string> GetPathsAndWeights(Dictionary<string, List<Edge>> graph, string src, string dest);
+        List<string> GetAllPathsWithWeights(Dictionary<string, List<Edge>> graph, string src, string dest);
+
+        List<string> GetAllPathsWithWeightsviaLandmarks(Dictionary<string, List<Edge>> graph, string src, string dest, List<string> landmarks);
+
+        List<string> GetAllPathsWithWeightsviaLandmarksandHops(Dictionary<string, List<Edge>> graph, string src, string dest, int maxHops);
+
+         bool HasPathBetweenVertices(Dictionary<string, List<Edge>> graph, string src, string dest);
     }
 }

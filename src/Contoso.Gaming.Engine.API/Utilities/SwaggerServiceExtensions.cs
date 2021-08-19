@@ -10,6 +10,7 @@ using Microsoft.OpenApi.Models;
 
 namespace Contoso.Gaming.Engine.API.Utilities
 {
+    [ExcludeFromCodeCoverage]
     public static class SwaggerServiceExtensions
     {
         /// <summary>
