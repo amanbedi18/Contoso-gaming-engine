@@ -1,8 +1,13 @@
 using Contoso.Gaming.Engine.API.Controllers.V1;
+using Contoso.Gaming.Engine.API.Entities;
+using Contoso.Gaming.Engine.API.Exceptions;
+using Contoso.Gaming.Engine.API.Models;
 using Contoso.Gaming.Engine.API.Services.Interfaces;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Moq;
-using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Xunit;
 
@@ -13,7 +18,7 @@ namespace Contoso.Gaming.Engine.API.Tests
         /// <summary>
         /// The Locate Players Controller.
         /// </summary>
-        private readonly LocatePlayersController locatePlayersController;
+        private readonly LocatePlayersOnMapController locatePlayersController;
 
         /// <summary>
         /// The mock players locator service.
@@ -23,37 +28,87 @@ namespace Contoso.Gaming.Engine.API.Tests
         /// <summary>
         /// The mock logger.
         /// </summary>
-        private readonly Mock<ILogger<LocatePlayersController>> mockLogger;
+        private readonly Mock<ILogger<LocatePlayersOnMapController>> mockLogger;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="LocatePlayersControllerTests"/> class.
         /// </summary>
         public LocatePlayersControllerTests()
         {
-            //HeaderDictionary headerDictionary = new();
-            //Mock<HttpResponse> response = new();
-            //response.SetupGet(r => r.Headers).Returns(headerDictionary);
+            ControllerContext controllerContext = new()
+            {
+                HttpContext = new DefaultHttpContext(),
+            };
 
-            //Mock<HttpContext> httpContext = new();
-            //httpContext.SetupGet(a => a.Response).Returns(response.Object);
+            this.mockLogger = new Mock<ILogger<LocatePlayersOnMapController>>();
+            this.mockPlayersLocatorService = new Mock<IPlayersLocatorService>();
 
-            //ControllerContext controllerContext = new()
-            //{
-            //    HttpContext = new DefaultHttpContext() { User = user },
-            //};
-
-
-            //this.locatePlayersController = new ContainersController(this._containerManager.Object)
-            //{
-            //    ControllerContext = controllerContext,
-            //};
+            this.locatePlayersController = new LocatePlayersOnMapController(this.mockPlayersLocatorService.Object, this.mockLogger.Object)
+            {
+                ControllerContext = controllerContext,
+            };
         }
-
         
         [Fact]
         public async Task GetAllPathsBetweenPlayersTest()
         {
+            this.mockPlayersLocatorService.Setup(x => x.FindAllRoutes(It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(new List<WeightedRoutesModel>() { new WeightedRoutesModel() { RouteValue = "ABC", RouteWeight = 34 } });
+
+            var testresponse = await this.locatePlayersController.GetAllRoutes("A", "C").ConfigureAwait(false);
+
+            var okobjectResult = Assert.IsType<OkObjectResult>(testresponse);
+            var finalReturnedObject = okobjectResult.Value as List<WeightedRoutesModel>;
+
+            Assert.NotNull(finalReturnedObject);
+            Assert.Single(finalReturnedObject);
+            Assert.Equal("ABC", finalReturnedObject[0].RouteValue);
+            Assert.Equal(34, finalReturnedObject[0].RouteWeight);
         }
 
+        [Fact]
+        public async Task GetAllPathsBetweenPlayersThrowsExceptionTest()
+        {
+            this.mockPlayersLocatorService.Setup(x => x.FindAllRoutes(It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(new List<WeightedRoutesModel>());
+            await Assert.ThrowsAsync<NotFoundException>(async () => await this.locatePlayersController.GetAllRoutes("X", "Z").ConfigureAwait(false));
+        }
+
+        [Fact]
+        public async Task FindRoutesBetweenPlayersTest()
+        {
+            this.mockPlayersLocatorService.Setup(x => x.FindRoutesAlongLandmarks(It.IsAny<RouteRequestDetails>())).ReturnsAsync(new List<WeightedRoutesModel>() { new WeightedRoutesModel() { RouteValue = "AED", RouteWeight = 36 } });
+
+            var testresponse = await this.locatePlayersController.FindRoutes(new RouteRequestDetails() { Source = "A", Destination = "D", RequiredHops = 3 }).ConfigureAwait(false);
+
+            var okobjectResult = Assert.IsType<OkObjectResult>(testresponse);
+            var finalReturnedObject = okobjectResult.Value as List<WeightedRoutesModel>;
+
+            Assert.NotNull(finalReturnedObject);
+            Assert.Single(finalReturnedObject);
+            Assert.Equal("AED", finalReturnedObject[0].RouteValue);
+            Assert.Equal(36, finalReturnedObject[0].RouteWeight);
+        }
+
+        [Fact]
+        public async Task FindRoutesBetweenPlayersViaLandmarksTest()
+        {
+            this.mockPlayersLocatorService.Setup(x => x.FindRoutesAlongLandmarks(It.IsAny<RouteRequestDetails>())).ReturnsAsync(new List<WeightedRoutesModel>() { new WeightedRoutesModel() { RouteValue = "ABE", RouteWeight = 39 } });
+
+            var testresponse = await this.locatePlayersController.FindRoutes(new RouteRequestDetails() { Source = "A", Destination = "E", Landmarks = new List<string>() { "B" } }).ConfigureAwait(false);
+
+            var okobjectResult = Assert.IsType<OkObjectResult>(testresponse);
+            var finalReturnedObject = okobjectResult.Value as List<WeightedRoutesModel>;
+
+            Assert.NotNull(finalReturnedObject);
+            Assert.Single(finalReturnedObject);
+            Assert.Equal("ABE", finalReturnedObject[0].RouteValue);
+            Assert.Equal(39, finalReturnedObject[0].RouteWeight);
+        }
+
+        [Fact]
+        public async Task FindRoutesBetweenPlayersThrowsExceptionTest()
+        {
+            this.mockPlayersLocatorService.Setup(x => x.FindRoutesAlongLandmarks(new RouteRequestDetails() { Source = "A", Destination = "B", RequiredHops = 3 })).ReturnsAsync(new List<WeightedRoutesModel>());
+            await Assert.ThrowsAsync<NotFoundException>(async () => await this.locatePlayersController.FindRoutes(new RouteRequestDetails() { Source = "A", Destination = "D", RequiredHops = 3 }).ConfigureAwait(false));
+        }
     }
 }

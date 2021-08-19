@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace Contoso.Gaming.Engine.API.DataStore
 {
@@ -15,8 +14,7 @@ namespace Contoso.Gaming.Engine.API.DataStore
         {
             if(!graphEdges.Any() || !graphVertices.Any() || vertices == 0 || edges == 0)
             {
-                // throw
-                return null;
+                throw new ArgumentException("Graph inputs are not correct");
             }
 
             if(!isInitialized)

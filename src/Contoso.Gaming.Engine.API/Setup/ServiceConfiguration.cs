@@ -7,13 +7,12 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System;
-using System.Collections.Generic;
-using System.Linq;
+using System.Diagnostics.CodeAnalysis;
 using System.Net.Mime;
-using System.Threading.Tasks;
 
 namespace Contoso.Gaming.Engine.API.Setup
 {
+    [ExcludeFromCodeCoverage]
     public static class ServiceConfiguration
     {
         /// <summary>
@@ -30,11 +29,26 @@ namespace Contoso.Gaming.Engine.API.Setup
                 {
                     Title = exception.Title,
                     Detail = exception.Detail,
-                    //// map it from exception
                     Status = StatusCodes.Status404NotFound,
                     Type = ApiHelper.GetProblemDetailsTypeUrl(StatusCodes.Status404NotFound),
                     Instance = exception.Instance,
                     AdditionalInfo = exception.AdditionalInfo,
+                });
+                setup.Map<ArgumentException>(exception => new ProblemDetails
+                {
+                    Title = exception.Message,
+                    Detail = "Problem with arguments passed",
+                    Status = StatusCodes.Status400BadRequest,
+                    Type = ApiHelper.GetProblemDetailsTypeUrl(StatusCodes.Status400BadRequest),
+                    Instance = exception.HelpLink,
+                });
+                setup.Map<Exception>(exception => new ProblemDetails
+                {
+                    Title = exception.Message,
+                    Detail = "Exception occured",
+                    Status = StatusCodes.Status400BadRequest,
+                    Type = ApiHelper.GetProblemDetailsTypeUrl(StatusCodes.Status400BadRequest),
+                    Instance = exception.HelpLink,
                 });
             });
         }
@@ -52,11 +66,11 @@ namespace Contoso.Gaming.Engine.API.Setup
                 {
                     var problemDetails = new ValidationProblemDetails(context.ModelState)
                     {
-                        Title = APIMessageConstant.ServiceConfigurationBadRequestMessageTitle,
-                        Instance = context.HttpContext.Request.Path,
+                        Title = "Validation failed for given inputs",
+                        Instance = context.HttpContext.TraceIdentifier,
                         Status = StatusCodes.Status400BadRequest,
                         Type = ApiHelper.GetProblemDetailsTypeUrl(StatusCodes.Status400BadRequest),
-                        Detail = APIMessageConstant.ServiceConfigurationValidationFailedDetailMessage,
+                        Detail = context.HttpContext.Request.Path,
                     };
                     return new BadRequestObjectResult(problemDetails)
                     {

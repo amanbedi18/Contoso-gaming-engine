@@ -1,11 +1,13 @@
 ﻿using Microsoft.AspNetCore.Mvc.Filters;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Threading.Tasks;
 
 namespace Contoso.Gaming.Engine.API.Exceptions
 {
+    [ExcludeFromCodeCoverage]
     public class HttpResponseExceptionFilter : IActionFilter
     {
         /// <summary>
