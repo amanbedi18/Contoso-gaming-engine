@@ -18,7 +18,7 @@ jobs:
         ref: ${{ github.ref }}
 
     - name: Setup .NET Core
-      uses: actions/setup-dotnet@v1
+      uses: actions/setup-dotnet@v1.7.2
       with:
         dotnet-version: ${{ env.DOTNET_CORE_VERSION }}
 
@@ -32,7 +32,7 @@ jobs:
       run: dotnet build ${{ env.SLN_PATH_API }} --no-restore
 
     - name: Test API
-      run: dotnet test ${{ env.SLN_PATH_API }} --results-directory ../TestResults "/p:CollectCoverage=true" "/p:CoverletOutput=../TestResults/"
+      run: dotnet test ${{ env.SLN_PATH_API }} --results-directory ../TestResults "/p:CollectCoverage=true" "/p:CoverletOutput=../TestResults/" "/p:CoverletOutputFormat=\"json,cobertura\""
 
     - name: dotnet-tests-report-API
       uses: zyborg/dotnet-tests-report@v1.4.4
@@ -41,3 +41,13 @@ jobs:
         report_name: API Unit Test Summary
         report_title: API Unit Test Summary
         github_token: ${{ secrets.GITHUB_TOKEN }}
+      
+    - name: Generate code coverage report for services
+        working-directory: ./src/tests/TestResults
+        run: reportgenerator -reports:./coverage.cobertura.xml -targetdir:./Reports
+
+      - name: Create code coverage report artifact for services
+        uses: actions/upload-artifact@v2
+        with:
+          name: unit-test-report-services
+          path: ./src/tests/TestResults/Reports
