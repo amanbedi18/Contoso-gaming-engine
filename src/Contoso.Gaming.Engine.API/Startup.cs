@@ -11,15 +11,17 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System.Diagnostics.CodeAnalysis;
+using Microsoft.Extensions.Logging;
 
 namespace Contoso.Gaming.Engine.API
 {
     [ExcludeFromCodeCoverage]
     public class Startup
     {
-        public Startup(IConfiguration configuration)
+        public Startup(IConfiguration configuration, IWebHostEnvironment env)
         {
             Configuration = configuration;
+            this.CurrentEnvironment = env;
         }
 
         public IConfiguration Configuration { get; }
@@ -36,7 +38,8 @@ namespace Contoso.Gaming.Engine.API
         public void ConfigureServices(IServiceCollection services)
         {
             services.ConfigureProblemDetailsMiddleware(this.CurrentEnvironment);
-            services.AddApplicationInsightsTelemetry(Configuration["APPINSIGHTS_CONNECTIONSTRING"]);
+            var appInsightsConnectionString = Configuration["ApplicationInsights:InstrumentationKey"];
+            services.AddApplicationInsightsTelemetry(appInsightsConnectionString);
 
             services.AddSingleton<IGraphService, GraphService>();
             // transient == scope?
@@ -45,7 +48,7 @@ namespace Contoso.Gaming.Engine.API
             services.AddControllers().AddNewtonsoftJson();
 
             services.AddControllers();
-            services.AddControllers(options => options.Filters.Add(new HttpResponseExceptionFilter()));
+            services.AddControllers(options => options.Filters.Add(typeof(HttpResponseExceptionFilter)));
 
             services.AddSwaggerDocumentation();
 
@@ -69,7 +72,7 @@ namespace Contoso.Gaming.Engine.API
 
             if (env.IsDevelopment())
             {
-                app.UseDeveloperExceptionPage();
+                //app.UseDeveloperExceptionPage();
                 app.UseSwagger();
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "Contoso.Gaming.Engine.API v1"));
             }

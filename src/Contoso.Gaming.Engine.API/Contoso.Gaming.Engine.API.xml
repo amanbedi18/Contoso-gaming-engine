@@ -4,21 +4,34 @@
         <name>Contoso.Gaming.Engine.API</name>
     </assembly>
     <members>
-        <member name="M:Contoso.Gaming.Engine.API.Controllers.V1.LocatePlayersOnMapController.GetAllRoutes(System.String,System.String)">
+        <member name="M:Contoso.Gaming.Engine.API.Controllers.V1.RouteController.GetAllRoutes(System.String,System.String)">
             <summary>
             Get possible routes from source to destination.
             </summary>
             <remarks>
             Sample request:
             
-            // change locateplayers to routecontroller, controller name should not be in the route
                 GET /api/v1/locateplayers/{source}/{destination}
             </remarks>
             <param name="source">The source id of the player.</param>
             <param name="destination">The destination id of the player.</param>
             <returns>Task <see cref="T:System.Threading.Tasks.Task"/> representing the asynchronous operation.</returns>
         </member>
-        <member name="M:Contoso.Gaming.Engine.API.Controllers.V1.LocatePlayersOnMapController.FindRoutes(Contoso.Gaming.Engine.API.Entities.RouteRequestDetails)">
+        <member name="M:Contoso.Gaming.Engine.API.Controllers.V1.RouteController.GetRoutesWithHops(System.String,System.String,System.Int32)">
+            <summary>
+            Get possible routes from source to destination with required number of hops.
+            </summary>
+            <remarks>
+            Sample request:
+            
+                GET /api/v1/locateplayers/{source}/{destination}/{hops}
+            </remarks>
+            <param name="source">The source id of the player.</param>
+            <param name="destination">The destination id of the player.</param>
+            <param name="hops">The number of hops.</param>
+            <returns>Task <see cref="T:System.Threading.Tasks.Task"/> representing the asynchronous operation.</returns>
+        </member>
+        <member name="M:Contoso.Gaming.Engine.API.Controllers.V1.RouteController.FindRoutes(Contoso.Gaming.Engine.API.Entities.RouteRequestDetails)">
             <summary>
             Post a message to find distance between landmarks via a given route and number of hops (optional).
             </summary>

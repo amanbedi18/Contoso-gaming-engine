@@ -42,7 +42,7 @@ namespace Contoso.Gaming.Engine.API.Tests
         [Fact]
         public async Task GetAllRoutesBetweenPlayersviaLandmarksTest()
         {
-            var testresponse = await this.playersLocatorService.FindRoutesAlongLandmarks(new Entities.RouteRequestDetails() { Source = "A", Destination = "C", RequiredHops = 2 }).ConfigureAwait(false);
+            var testresponse = await this.playersLocatorService.FindRoutesAlongLandmarks(new Entities.RouteRequestDetails() { Source = "A", Destination = "C", Landmarks = new List<string>() { "B" } }).ConfigureAwait(false);
 
             Assert.NotNull(testresponse);
             //Assert.Equal("ABC", finalReturnedObject[0].RouteValue);
@@ -68,7 +68,7 @@ namespace Contoso.Gaming.Engine.API.Tests
             await Assert.ThrowsAsync<ArgumentException>(async () => await this.playersLocatorService.FindRoutesAlongLandmarks(new Entities.RouteRequestDetails() { Source = "A", Destination = "A" }).ConfigureAwait(false));
             await Assert.ThrowsAsync<ArgumentException>(async () => await this.playersLocatorService.FindRoutesAlongLandmarks(new Entities.RouteRequestDetails() { Source = "X", Destination = "Y" }).ConfigureAwait(false));
             await Assert.ThrowsAsync<ArgumentException>(async () => await this.playersLocatorService.FindRoutesAlongLandmarks(new Entities.RouteRequestDetails() { Source = "A", Destination = "B", Landmarks = new List<string>() { "X" } }).ConfigureAwait(false));
-            await Assert.ThrowsAsync<ArgumentException>(async () => await this.playersLocatorService.FindRoutesAlongLandmarks(new Entities.RouteRequestDetails() { Source = "A", Destination = "B", Landmarks = new List<string>() { "X" }, RequiredHops = 9 }).ConfigureAwait(false));
+            await Assert.ThrowsAsync<ArgumentException>(async () => await this.playersLocatorService.FindRoutesAlongLandmarks(new Entities.RouteRequestDetails() { Source = "A", Destination = "B", Landmarks = new List<string>() { "X" } }).ConfigureAwait(false));
         }
     }
 }

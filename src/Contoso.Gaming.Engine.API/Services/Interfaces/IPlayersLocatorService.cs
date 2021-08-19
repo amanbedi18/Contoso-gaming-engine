@@ -12,5 +12,8 @@ namespace Contoso.Gaming.Engine.API.Services.Interfaces
         Task<IEnumerable<WeightedRoutesModel>> FindAllRoutes(string source, string destination);
 
         Task<IEnumerable<WeightedRoutesModel>> FindRoutesAlongLandmarks(RouteRequestDetails routeRequestDetails);
+
+        Task<IEnumerable<WeightedRoutesModel>> FindAllRoutesWithHops(string source, string destination, int hops);
+
     }
 }

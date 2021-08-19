@@ -19,10 +19,6 @@ namespace Contoso.Gaming.Engine.API.Entities
         [JsonProperty("landmarks")]
         public IEnumerable<string> Landmarks { get; set; }
 
-        [JsonProperty("requiredHops")]
-        [DefaultValue(0)]
-        public int RequiredHops { get; set; }
-
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {
             var validationResults = new List<ValidationResult>();
@@ -37,10 +33,7 @@ namespace Contoso.Gaming.Engine.API.Entities
                 validationResults.Add(new ValidationResult($"Source cannot be same as destination", new[] { nameof(this.Source), nameof(this.Destination) }));
             }
 
-            if (RequiredHops < 0)
-            {
-                validationResults.Add(new ValidationResult($"Required Hops cannot be negative", new[] { nameof(this.RequiredHops) }));
-            }
+            
 
             if (Landmarks != null && Landmarks.Any())
             {

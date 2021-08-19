@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Threading.Tasks;
 
 namespace Contoso.Gaming.Engine.API.Utilities
 {
+    [ExcludeFromCodeCoverage]
     public static class ApiHelper
     {
         /// <summary>

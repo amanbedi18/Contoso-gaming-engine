@@ -38,11 +38,11 @@ namespace Contoso.Gaming.Engine.API.Services
         //3.	The distance between landmarks via the route A-E-D.
         private void getPathsAndWeightsviaLandmarks(Dictionary<string, List<Edge>> graph, string src, string dest, HashSet<string> isVisited, List<string> allPaths, string currentPath, int weightSoFar, List<string> landmarks, int idx)
         {
-            if (src == dest && idx == landmarks.Count)
+            if (src == dest && idx == landmarks.Count + 1)
             {
                 Console.WriteLine(currentPath);
                 allPaths.Add(currentPath + "@" + weightSoFar);
-                weightSoFar = 0;
+                return;
             }
 
             isVisited.Add(src);
@@ -69,7 +69,7 @@ namespace Contoso.Gaming.Engine.API.Services
             {
                 Console.WriteLine(currentPath);
                 allPaths.Add(currentPath + "@" + weightSoFar);
-                weightSoFar = 0;
+                return;
             }
 
             isVisited.Add(src);
@@ -88,11 +88,16 @@ namespace Contoso.Gaming.Engine.API.Services
         // path between A & C with maximum of 2 hops
         private void getPathsAndWeightsWithGivenHops(Dictionary<string, List<Edge>> graph, string src, string dest, HashSet<string> isVisited, List<string> allPaths, string currentPath, int weightSoFar, int ct, int maxHops)
         {
-            if (src == dest && ct == maxHops)
+            if (ct > maxHops + 1)
+            {
+                return;
+            }
+
+            if (ct == maxHops + 1 && src == dest)
             {
                 Console.WriteLine(currentPath);
                 allPaths.Add(currentPath + "@" + weightSoFar);
-                weightSoFar = 0;
+                return;
             }
 
             isVisited.Add(src);
@@ -101,7 +106,6 @@ namespace Contoso.Gaming.Engine.API.Services
                 if (!isVisited.Contains(edge.Nbr))
                 {
                     getPathsAndWeightsWithGivenHops(graph, edge.Nbr, dest, isVisited, allPaths, currentPath + edge.Nbr.ToString(), weightSoFar + edge.Wt, ct + 1, maxHops);
-
                 }
             }
 

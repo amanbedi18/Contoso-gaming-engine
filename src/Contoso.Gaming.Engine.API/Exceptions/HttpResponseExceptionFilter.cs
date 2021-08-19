@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc.Filters;
+﻿using Microsoft.ApplicationInsights;
+using Microsoft.AspNetCore.Mvc.Filters;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
@@ -10,6 +12,12 @@ namespace Contoso.Gaming.Engine.API.Exceptions
     [ExcludeFromCodeCoverage]
     public class HttpResponseExceptionFilter : IActionFilter
     {
+        private readonly TelemetryClient logger;
+
+        public HttpResponseExceptionFilter(TelemetryClient logger)
+        {
+            this.logger = logger;
+        }
         /// <summary>
         /// Called before the action executes, after model binding is complete.
         /// </summary>
@@ -24,11 +32,8 @@ namespace Contoso.Gaming.Engine.API.Exceptions
         /// <param name="context">The <see cref="T:Microsoft.AspNetCore.Mvc.Filters.ActionExecutedContext" />.</param>
         public void OnActionExecuted(ActionExecutedContext context)
         {
-            if (context.Exception is NotFoundException exception)
-            {
-                //// Log to appinsights with trace / correlation id
-                return;
-            }
+            if(context.Exception!=null)
+            this.logger.TrackException(context.Exception, new Dictionary<string, string>() { {"TraceId", context.HttpContext.TraceIdentifier } });
         }
     }
 }
