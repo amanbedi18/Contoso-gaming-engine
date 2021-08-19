@@ -44,7 +44,7 @@ jobs:
       
     - name: Generate code coverage report for services
       working-directory: ./tests/TestResults
-      run: reportgenerator -reports:./coverage.cobertura.xml -targetdir:./Reports
+      run: reportgenerator -reports:./coverage.json -targetdir:./Reports
 
     - name: Create code coverage report artifact for services
       uses: actions/upload-artifact@v2
