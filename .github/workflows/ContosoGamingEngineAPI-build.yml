@@ -10,7 +10,7 @@ on:
 
 env:
   DOTNET_CORE_VERSION: 5.0.x
-  SLN_PATH_API: src/Contoso.Gaming.Engine.API.sln
+  SLN_PATH_API: src
 
 jobs:
   build-and-deploy:
