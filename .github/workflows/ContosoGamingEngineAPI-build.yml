@@ -43,11 +43,11 @@ jobs:
         github_token: ${{ secrets.GITHUB_TOKEN }}
       
     - name: Generate code coverage report for services
-      working-directory: ./src/tests/TestResults
+      working-directory: ./tests/TestResults
       run: reportgenerator -reports:./coverage.cobertura.xml -targetdir:./Reports
 
     - name: Create code coverage report artifact for services
       uses: actions/upload-artifact@v2
       with:
         name: unit-test-report-services
-        path: ./src/tests/TestResults/Reports
+        path: ./tests/TestResults/Reports
