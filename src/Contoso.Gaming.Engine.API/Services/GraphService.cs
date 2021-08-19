@@ -46,6 +46,7 @@ namespace Contoso.Gaming.Engine.API.Services
         }
 
         // find all paths between A & C
+        // limitation of recursive call
         private void getAllPathsAndWeights(Dictionary<string, List<Edge>> graph, string src, string dest, HashSet<string> isVisited, List<string> allPaths, string currentPath, int weightSoFar)
         {
             if (src == dest)

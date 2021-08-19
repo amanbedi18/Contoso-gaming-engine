@@ -27,6 +27,7 @@ namespace Contoso.Gaming.Engine.API.Services
 
         public async Task<IEnumerable<WeightedRoutesModel>> FindAllRoutes(string source, string destination)
         {
+            // source == destination
             var res = this.graphService.GetPathsAndWeights(Graph, source, destination);
             var routes = res.Select(s =>
             {

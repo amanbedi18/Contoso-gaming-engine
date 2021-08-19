@@ -33,6 +33,7 @@ namespace Contoso.Gaming.Engine.API.Controllers.V1
         /// <remarks>
         /// Sample request:
         /// 
+        /// // change locateplayers to routecontroller, controller name should not be in the route
         ///     GET /api/v1/locateplayers/{source}/{destination}
         /// </remarks>
         /// <param name="source">The source id of the player.</param>
@@ -50,7 +51,7 @@ namespace Contoso.Gaming.Engine.API.Controllers.V1
 
             //if (appMetaDataStore == null)
             //{
-            //    throw new MetaDataStoreNotFoundException(title: "Metadata not found", instance: "id", detail: "Metadata is not present", additionalInfo: APIMessageConstant.notfound);
+            //    throw new NotFoundException(title: "Metadata not found", instance: "id", detail: "Metadata is not present", additionalInfo: APIMessageConstant.notfound);
             //}
 
             return await Task.FromResult(this.Ok(routes));

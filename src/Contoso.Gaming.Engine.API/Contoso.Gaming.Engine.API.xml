@@ -11,6 +11,7 @@
             <remarks>
             Sample request:
             
+            // change locateplayers to routecontroller, controller name should not be in the route
                 GET /api/v1/locateplayers/{source}/{destination}
             </remarks>
             <param name="source">The source id of the player.</param>

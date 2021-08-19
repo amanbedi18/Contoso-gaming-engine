@@ -17,7 +17,9 @@ namespace Contoso.Gaming.Engine.API
             Host.CreateDefaultBuilder(args)
                 .ConfigureServices((hostContext, services) =>
                 {
+                    // consider creating in memory graph store as singleton
                     services.AddSingleton<IGraphService, GraphService>();
+                    // transient == scope?
                     services.AddScoped<IPlayersLocatorService, PlayersLocatorService>();
                 })
                 .ConfigureWebHostDefaults(webBuilder =>
