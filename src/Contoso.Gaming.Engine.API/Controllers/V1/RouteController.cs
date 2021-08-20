@@ -143,7 +143,7 @@ namespace Contoso.Gaming.Engine.API.Controllers.V1
 
             if (!routes.Any())
             {
-                throw new NotFoundException(title: "Path not found", instance: this.HttpContext.TraceIdentifier, detail: $"No path found between {routeRequestDetails.Source} & {routeRequestDetails.Destination} via given landmarks and hops.", additionalInfo: APIMessageConstants.PathNotFoundMessage);
+                throw new NotFoundException(title: "Path not found", instance: this.HttpContext.TraceIdentifier, detail: $"No path found between {routeRequestDetails.Source} & {routeRequestDetails.Destination} via given landmarks.", additionalInfo: APIMessageConstants.PathNotFoundMessage);
             }
 
             this.logger.TrackTrace($"Found {routes.Count()} routes for trace id: {this.HttpContext.TraceIdentifier}");

@@ -6,7 +6,6 @@
 
 namespace Contoso.Gaming.Engine.API.Services
 {
-    using System;
     using System.Collections.Generic;
     using Contoso.Gaming.Engine.API.DataStore;
     using Contoso.Gaming.Engine.API.Services.Interfaces;
@@ -32,7 +31,7 @@ namespace Contoso.Gaming.Engine.API.Services
         }
 
         /// <summary>
-        /// Gets all paths with weightsvia landmarks.
+        /// Gets all paths with weights via landmarks.
         /// </summary>
         /// <param name="graph">The graph.</param>
         /// <param name="src">The source.</param>
@@ -47,7 +46,7 @@ namespace Contoso.Gaming.Engine.API.Services
         }
 
         /// <summary>
-        /// Gets all paths with weightsvia landmarksand hops.
+        /// Gets all paths with weights via landmarksand hops.
         /// </summary>
         /// <param name="graph">The graph.</param>
         /// <param name="src">The source.</param>
@@ -79,7 +78,7 @@ namespace Contoso.Gaming.Engine.API.Services
         //// 2.	The distance between landmarks via the route A-E-B-C-D.
         //// 3.	The distance between landmarks via the route A-E-D.
         /// <summary>
-        /// Gets the paths and weightsvia landmarks.
+        /// Gets the paths and weights via landmarks.
         /// </summary>
         /// <param name="graph">The graph.</param>
         /// <param name="src">The source.</param>
