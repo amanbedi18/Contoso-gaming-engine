@@ -38,8 +38,7 @@ namespace Contoso.Gaming.Engine.API
         public void ConfigureServices(IServiceCollection services)
         {
             services.ConfigureProblemDetailsMiddleware(this.CurrentEnvironment);
-            var appInsightsConnectionString = Configuration["ApplicationInsights:InstrumentationKey"];
-            services.AddApplicationInsightsTelemetry(appInsightsConnectionString);
+            services.AddApplicationInsightsTelemetry(Configuration["APPINSIGHTS_CONNECTIONSTRING"]);
 
             services.AddSingleton<IGraphService, GraphService>();
             // transient == scope?
