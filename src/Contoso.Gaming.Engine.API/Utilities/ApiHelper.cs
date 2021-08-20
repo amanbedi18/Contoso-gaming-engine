@@ -1,17 +1,26 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿// -----------------------------------------------------------------------
+// <copyright file="ApiHelper.cs" company="Contoso Gaming">
+// Copyright (c) Contoso Gaming. All rights reserved.
+// </copyright>
+// -----------------------------------------------------------------------
 
 namespace Contoso.Gaming.Engine.API.Utilities
 {
+    using System.Diagnostics.CodeAnalysis;
+
+    /// <summary>
+    /// The Api Helper.
+    /// </summary>
+    [ExcludeFromCodeCoverage]
     public static class ApiHelper
     {
         /// <summary>
         /// Gets the problem details type URL.
         /// </summary>
         /// <param name="httpStatusCode">The HTTP status code.</param>
-        /// <returns>The type.</returns>
+        /// <returns>
+        /// The type.
+        /// </returns>
         public static string GetProblemDetailsTypeUrl(int httpStatusCode)
         {
             string typeValue;

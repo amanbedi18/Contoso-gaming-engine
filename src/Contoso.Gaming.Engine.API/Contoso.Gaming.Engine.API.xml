@@ -4,41 +4,219 @@
         <name>Contoso.Gaming.Engine.API</name>
     </assembly>
     <members>
-        <member name="M:Contoso.Gaming.Engine.API.Controllers.V1.LocatePlayersOnMapController.GetAllRoutes(System.String,System.String)">
+        <member name="T:Contoso.Gaming.Engine.API.Controllers.V1.RouteController">
+            <summary>
+            The Route Controller.
+            </summary>
+            <seealso cref="T:Microsoft.AspNetCore.Mvc.ControllerBase" />
+        </member>
+        <member name="F:Contoso.Gaming.Engine.API.Controllers.V1.RouteController.playersLocatorService">
+            <summary>
+            The players locator service.
+            </summary>
+        </member>
+        <member name="F:Contoso.Gaming.Engine.API.Controllers.V1.RouteController.logger">
+            <summary>
+            The logger.
+            </summary>
+        </member>
+        <member name="M:Contoso.Gaming.Engine.API.Controllers.V1.RouteController.#ctor(Contoso.Gaming.Engine.API.Services.Interfaces.IPlayersLocatorService,Microsoft.ApplicationInsights.TelemetryClient)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Contoso.Gaming.Engine.API.Controllers.V1.RouteController"/> class.
+            </summary>
+            <param name="playersLocatorService">The players locator service.</param>
+            <param name="logger">The logger.</param>
+        </member>
+        <member name="M:Contoso.Gaming.Engine.API.Controllers.V1.RouteController.GetAllRoutes(System.String,System.String)">
             <summary>
             Get possible routes from source to destination.
             </summary>
             <remarks>
             Sample request:
             
-            // change locateplayers to routecontroller, controller name should not be in the route
                 GET /api/v1/locateplayers/{source}/{destination}
             </remarks>
             <param name="source">The source id of the player.</param>
             <param name="destination">The destination id of the player.</param>
             <returns>Task <see cref="T:System.Threading.Tasks.Task"/> representing the asynchronous operation.</returns>
         </member>
-        <member name="M:Contoso.Gaming.Engine.API.Controllers.V1.LocatePlayersOnMapController.FindRoutes(Contoso.Gaming.Engine.API.Entities.RouteRequestDetails)">
+        <member name="M:Contoso.Gaming.Engine.API.Controllers.V1.RouteController.GetRoutesWithHops(System.String,System.String,System.Int32)">
             <summary>
-            Post a message to find distance between landmarks via a given route and number of hops (optional).
+            Get possible routes from source to destination with required number of hops.
             </summary>
             <remarks>
             Sample request:
             
-                POST /api/v1/locateplayers/findroutes
-                {
-                   "source": "A", #source should not be same as destination
-                   "destination": "E"
-                   "landmarks": {  #optional parameter
-                        "B",
-                        "C",
-                        "D"
-                    },
-                    "requiredHops": 3 #optional parameter, defaults to zero if not provided
-                }
+                GET /api/v1/locateplayers/{source}/{destination}/{hops}
             </remarks>
-            <param name="routeRequestDetails">The route request details.</param>
+            <param name="source">The source id of the player.</param>
+            <param name="destination">The destination id of the player.</param>
+            <param name="hops">The number of hops.</param>
             <returns>Task <see cref="T:System.Threading.Tasks.Task"/> representing the asynchronous operation.</returns>
+        </member>
+        <member name="M:Contoso.Gaming.Engine.API.Controllers.V1.RouteController.FindRoutes(Contoso.Gaming.Engine.API.Entities.RouteRequestDetails)">
+             <summary>
+             Post a message to find distance between landmarks via a given route and number of hops (optional).
+             </summary>
+             <remarks>
+             Sample request:
+            
+                 POST /api/v1/locateplayers/findroutes
+                 {
+                    "source": "A", #source should not be same as destination
+                    "destination": "E"
+                    "landmarks": {  #optional parameter
+                         "B",
+                         "C",
+                         "D"
+                     },
+                     "requiredHops": 3 #optional parameter, defaults to zero if not provided
+                 }
+             </remarks>
+             <param name="routeRequestDetails">The route request details.</param>
+             <returns>Task <see cref="T:System.Threading.Tasks.Task"/> representing the asynchronous operation.</returns>
+        </member>
+        <member name="T:Contoso.Gaming.Engine.API.Controllers.V2.RouteController">
+            <summary>
+            The Route Controller.
+            </summary>
+        </member>
+        <member name="T:Contoso.Gaming.Engine.API.DataStore.Edge">
+            <summary>
+            The Edge.
+            </summary>
+        </member>
+        <member name="F:Contoso.Gaming.Engine.API.DataStore.Edge.src">
+            <summary>
+            The source.
+            </summary>
+        </member>
+        <member name="F:Contoso.Gaming.Engine.API.DataStore.Edge.nbr">
+            <summary>
+            The neighbour.
+            </summary>
+        </member>
+        <member name="F:Contoso.Gaming.Engine.API.DataStore.Edge.wt">
+            <summary>
+            The weight.
+            </summary>
+        </member>
+        <member name="M:Contoso.Gaming.Engine.API.DataStore.Edge.#ctor(System.String,System.String,System.Int32)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Contoso.Gaming.Engine.API.DataStore.Edge"/> class.
+            </summary>
+            <param name="src">The source.</param>
+            <param name="nbr">The NBR.</param>
+            <param name="wt">The wt.</param>
+        </member>
+        <member name="P:Contoso.Gaming.Engine.API.DataStore.Edge.Src">
+            <summary>
+            Gets the source.
+            </summary>
+            <value>
+            The source.
+            </value>
+        </member>
+        <member name="P:Contoso.Gaming.Engine.API.DataStore.Edge.Nbr">
+            <summary>
+            Gets the neighbour.
+            </summary>
+            <value>
+            The neighbour.
+            </value>
+        </member>
+        <member name="P:Contoso.Gaming.Engine.API.DataStore.Edge.Wt">
+            <summary>
+            Gets the weight.
+            </summary>
+            <value>
+            The weight.
+            </value>
+        </member>
+        <member name="T:Contoso.Gaming.Engine.API.DataStore.InMemoryGraph">
+            <summary>
+            The In Memory Graph.
+            </summary>
+        </member>
+        <member name="F:Contoso.Gaming.Engine.API.DataStore.InMemoryGraph.isInitialized">
+            <summary>
+            The is initialized.
+            </summary>
+        </member>
+        <member name="P:Contoso.Gaming.Engine.API.DataStore.InMemoryGraph.Graph">
+            <summary>
+            Gets the graph.
+            </summary>
+            <value>
+            The graph.
+            </value>
+        </member>
+        <member name="M:Contoso.Gaming.Engine.API.DataStore.InMemoryGraph.GetInMemoryGraph(System.Int32,System.Int32,System.String[],System.String[])">
+            <summary>
+            Gets the in memory graph.
+            </summary>
+            <param name="vertices">The vertices.</param>
+            <param name="edges">The edges.</param>
+            <param name="graphEdges">The graph edges.</param>
+            <param name="graphVertices">The graph vertices.</param>
+            <returns>Returns in memory graph.</returns>
+            <exception cref="T:System.ArgumentException">Graph inputs are not correct.</exception>
+        </member>
+        <member name="T:Contoso.Gaming.Engine.API.Entities.RouteRequestDetails">
+            <summary>
+            The Route Request Details.
+            </summary>
+            <seealso cref="T:System.ComponentModel.DataAnnotations.IValidatableObject" />
+        </member>
+        <member name="P:Contoso.Gaming.Engine.API.Entities.RouteRequestDetails.Source">
+            <summary>
+            Gets or sets the source.
+            </summary>
+            <value>
+            The source.
+            </value>
+        </member>
+        <member name="P:Contoso.Gaming.Engine.API.Entities.RouteRequestDetails.Destination">
+            <summary>
+            Gets or sets the destination.
+            </summary>
+            <value>
+            The destination.
+            </value>
+        </member>
+        <member name="P:Contoso.Gaming.Engine.API.Entities.RouteRequestDetails.Landmarks">
+            <summary>
+            Gets or sets the landmarks.
+            </summary>
+            <value>
+            The landmarks.
+            </value>
+        </member>
+        <member name="M:Contoso.Gaming.Engine.API.Entities.RouteRequestDetails.Validate(System.ComponentModel.DataAnnotations.ValidationContext)">
+            <summary>
+            Determines whether the specified object is valid.
+            </summary>
+            <param name="validationContext">The validation context.</param>
+            <returns>
+            A collection that holds failed-validation information.
+            </returns>
+        </member>
+        <member name="T:Contoso.Gaming.Engine.API.Exceptions.HttpResponseExceptionFilter">
+            <summary>
+            The Http Response Exception Filter.
+            </summary>
+            <seealso cref="T:Microsoft.AspNetCore.Mvc.Filters.IActionFilter" />
+        </member>
+        <member name="F:Contoso.Gaming.Engine.API.Exceptions.HttpResponseExceptionFilter.logger">
+            <summary>
+            The logger.
+            </summary>
+        </member>
+        <member name="M:Contoso.Gaming.Engine.API.Exceptions.HttpResponseExceptionFilter.#ctor(Microsoft.ApplicationInsights.TelemetryClient)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Contoso.Gaming.Engine.API.Exceptions.HttpResponseExceptionFilter"/> class.
+            </summary>
+            <param name="logger">The logger.</param>
         </member>
         <member name="M:Contoso.Gaming.Engine.API.Exceptions.HttpResponseExceptionFilter.OnActionExecuting(Microsoft.AspNetCore.Mvc.Filters.ActionExecutingContext)">
             <summary>
@@ -91,7 +269,7 @@
         </member>
         <member name="T:Contoso.Gaming.Engine.API.Exceptions.NotFoundException">
             <summary>
-            The not found exception
+            The not found exception.
             </summary>
             <seealso cref="T:System.Exception" />
             <seealso cref="T:Contoso.Gaming.Engine.API.Exceptions.ICustomException" />
@@ -151,6 +329,320 @@
             The additional information.
             </value>
         </member>
+        <member name="T:Contoso.Gaming.Engine.API.Models.WeightedRoutesModel">
+            <summary>
+            The Weighted Routes Model.
+            </summary>
+        </member>
+        <member name="P:Contoso.Gaming.Engine.API.Models.WeightedRoutesModel.RouteValue">
+            <summary>
+            Gets or sets the route value.
+            </summary>
+            <value>
+            The route value.
+            </value>
+        </member>
+        <member name="P:Contoso.Gaming.Engine.API.Models.WeightedRoutesModel.RouteWeight">
+            <summary>
+            Gets or sets the route weight.
+            </summary>
+            <value>
+            The route weight.
+            </value>
+        </member>
+        <member name="T:Contoso.Gaming.Engine.API.Program">
+            <summary>
+            The Program.
+            </summary>
+        </member>
+        <member name="M:Contoso.Gaming.Engine.API.Program.Main(System.String[])">
+            <summary>
+            Defines the entry point of the application.
+            </summary>
+            <param name="args">The arguments.</param>
+        </member>
+        <member name="M:Contoso.Gaming.Engine.API.Program.CreateHostBuilder(System.String[])">
+            <summary>
+            Creates the host builder.
+            </summary>
+            <param name="args">The arguments.</param>
+            <returns>Returns Host Builder.</returns>
+        </member>
+        <member name="T:Contoso.Gaming.Engine.API.Services.GraphService">
+            <summary>
+            The Graph Service.
+            </summary>
+            <seealso cref="T:Contoso.Gaming.Engine.API.Services.Interfaces.IGraphService" />
+        </member>
+        <member name="M:Contoso.Gaming.Engine.API.Services.GraphService.GetAllPathsWithWeights(System.Collections.Generic.Dictionary{System.String,System.Collections.Generic.List{Contoso.Gaming.Engine.API.DataStore.Edge}},System.String,System.String)">
+            <summary>
+            Gets all paths with weights.
+            </summary>
+            <param name="graph">The graph.</param>
+            <param name="src">The source.</param>
+            <param name="dest">The dest.</param>
+            <returns>Returns list of paths.</returns>
+        </member>
+        <member name="M:Contoso.Gaming.Engine.API.Services.GraphService.GetAllPathsWithWeightsviaLandmarks(System.Collections.Generic.Dictionary{System.String,System.Collections.Generic.List{Contoso.Gaming.Engine.API.DataStore.Edge}},System.String,System.String,System.Collections.Generic.List{System.String})">
+            <summary>
+            Gets all paths with weightsvia landmarks.
+            </summary>
+            <param name="graph">The graph.</param>
+            <param name="src">The source.</param>
+            <param name="dest">The dest.</param>
+            <param name="landmarks">The landmarks.</param>
+            <returns>Returns list of paths.</returns>
+        </member>
+        <member name="M:Contoso.Gaming.Engine.API.Services.GraphService.GetAllPathsWithWeightsviaLandmarksandHops(System.Collections.Generic.Dictionary{System.String,System.Collections.Generic.List{Contoso.Gaming.Engine.API.DataStore.Edge}},System.String,System.String,System.Int32)">
+            <summary>
+            Gets all paths with weightsvia landmarksand hops.
+            </summary>
+            <param name="graph">The graph.</param>
+            <param name="src">The source.</param>
+            <param name="dest">The dest.</param>
+            <param name="maxHops">The maximum hops.</param>
+            <returns>Returns list of paths.</returns>
+        </member>
+        <member name="M:Contoso.Gaming.Engine.API.Services.GraphService.HasPathBetweenVertices(System.Collections.Generic.Dictionary{System.String,System.Collections.Generic.List{Contoso.Gaming.Engine.API.DataStore.Edge}},System.String,System.String)">
+            <summary>
+            Determines whether [has path between vertices] [the specified graph].
+            </summary>
+            <param name="graph">The graph.</param>
+            <param name="src">The source.</param>
+            <param name="dest">The dest.</param>
+            <returns>
+              <c>true</c> if [has path between vertices] [the specified graph]; otherwise, <c>false</c>.
+            </returns>
+        </member>
+        <member name="M:Contoso.Gaming.Engine.API.Services.GraphService.getPathsAndWeightsviaLandmarks(System.Collections.Generic.Dictionary{System.String,System.Collections.Generic.List{Contoso.Gaming.Engine.API.DataStore.Edge}},System.String,System.String,System.Collections.Generic.HashSet{System.String},System.Collections.Generic.List{System.String},System.String,System.Int32,System.Collections.Generic.List{System.String},System.Int32)">
+            <summary>
+            Gets the paths and weightsvia landmarks.
+            </summary>
+            <param name="graph">The graph.</param>
+            <param name="src">The source.</param>
+            <param name="dest">The dest.</param>
+            <param name="isVisited">The is visited.</param>
+            <param name="allPaths">All paths.</param>
+            <param name="currentPath">The current path.</param>
+            <param name="weightSoFar">The weight so far.</param>
+            <param name="landmarks">The landmarks.</param>
+            <param name="idx">The index.</param>
+        </member>
+        <member name="M:Contoso.Gaming.Engine.API.Services.GraphService.getAllPathsWithWeights(System.Collections.Generic.Dictionary{System.String,System.Collections.Generic.List{Contoso.Gaming.Engine.API.DataStore.Edge}},System.String,System.String,System.Collections.Generic.HashSet{System.String},System.Collections.Generic.List{System.String},System.String,System.Int32)">
+            <summary>
+            Gets all paths with weights.
+            </summary>
+            <param name="graph">The graph.</param>
+            <param name="src">The source.</param>
+            <param name="dest">The dest.</param>
+            <param name="isVisited">The is visited.</param>
+            <param name="allPaths">All paths.</param>
+            <param name="currentPath">The current path.</param>
+            <param name="weightSoFar">The weight so far.</param>
+        </member>
+        <member name="M:Contoso.Gaming.Engine.API.Services.GraphService.getPathsAndWeightsWithGivenHops(System.Collections.Generic.Dictionary{System.String,System.Collections.Generic.List{Contoso.Gaming.Engine.API.DataStore.Edge}},System.String,System.String,System.Collections.Generic.HashSet{System.String},System.Collections.Generic.List{System.String},System.String,System.Int32,System.Int32,System.Int32)">
+            <summary>
+            Gets the paths and weights with given hops.
+            </summary>
+            <param name="graph">The graph.</param>
+            <param name="src">The source.</param>
+            <param name="dest">The dest.</param>
+            <param name="isVisited">The is visited.</param>
+            <param name="allPaths">All paths.</param>
+            <param name="currentPath">The current path.</param>
+            <param name="weightSoFar">The weight so far.</param>
+            <param name="ct">The ct.</param>
+            <param name="maxHops">The maximum hops.</param>
+        </member>
+        <member name="M:Contoso.Gaming.Engine.API.Services.GraphService.hasPathBetweenVerices(System.Collections.Generic.Dictionary{System.String,System.Collections.Generic.List{Contoso.Gaming.Engine.API.DataStore.Edge}},System.String,System.String,System.Collections.Generic.HashSet{System.String})">
+            <summary>
+            Determines whether [has path between verices] [the specified graph].
+            </summary>
+            <param name="graph">The graph.</param>
+            <param name="src">The source.</param>
+            <param name="dest">The dest.</param>
+            <param name="isVisited">The is visited.</param>
+            <returns>
+              <c>true</c> if [has path between verices] [the specified graph]; otherwise, <c>false</c>.
+            </returns>
+        </member>
+        <member name="T:Contoso.Gaming.Engine.API.Services.Interfaces.IGraphService">
+            <summary>
+            The Graph Service Interface.
+            </summary>
+        </member>
+        <member name="M:Contoso.Gaming.Engine.API.Services.Interfaces.IGraphService.GetAllPathsWithWeights(System.Collections.Generic.Dictionary{System.String,System.Collections.Generic.List{Contoso.Gaming.Engine.API.DataStore.Edge}},System.String,System.String)">
+            <summary>
+            Gets all paths with weights.
+            </summary>
+            <param name="graph">The graph.</param>
+            <param name="src">The source.</param>
+            <param name="dest">The dest.</param>
+            <returns>Returns list of paths.</returns>
+        </member>
+        <member name="M:Contoso.Gaming.Engine.API.Services.Interfaces.IGraphService.GetAllPathsWithWeightsviaLandmarks(System.Collections.Generic.Dictionary{System.String,System.Collections.Generic.List{Contoso.Gaming.Engine.API.DataStore.Edge}},System.String,System.String,System.Collections.Generic.List{System.String})">
+            <summary>
+            Gets all paths with weightsvia landmarks.
+            </summary>
+            <param name="graph">The graph.</param>
+            <param name="src">The source.</param>
+            <param name="dest">The dest.</param>
+            <param name="landmarks">The landmarks.</param>
+            <returns>Returns list of paths.</returns>
+        </member>
+        <member name="M:Contoso.Gaming.Engine.API.Services.Interfaces.IGraphService.GetAllPathsWithWeightsviaLandmarksandHops(System.Collections.Generic.Dictionary{System.String,System.Collections.Generic.List{Contoso.Gaming.Engine.API.DataStore.Edge}},System.String,System.String,System.Int32)">
+            <summary>
+            Gets all paths with weightsvia landmarksand hops.
+            </summary>
+            <param name="graph">The graph.</param>
+            <param name="src">The source.</param>
+            <param name="dest">The dest.</param>
+            <param name="maxHops">The maximum hops.</param>
+            <returns>Returns list of paths.</returns>
+        </member>
+        <member name="M:Contoso.Gaming.Engine.API.Services.Interfaces.IGraphService.HasPathBetweenVertices(System.Collections.Generic.Dictionary{System.String,System.Collections.Generic.List{Contoso.Gaming.Engine.API.DataStore.Edge}},System.String,System.String)">
+            <summary>
+            Determines whether [has path between vertices] [the specified graph].
+            </summary>
+            <param name="graph">The graph.</param>
+            <param name="src">The source.</param>
+            <param name="dest">The dest.</param>
+            <returns>
+              <c>true</c> if [has path between vertices] [the specified graph]; otherwise, <c>false</c>.
+            </returns>
+        </member>
+        <member name="T:Contoso.Gaming.Engine.API.Services.Interfaces.IPlayersLocatorService">
+            <summary>
+            The Players Locator Service interface.
+            </summary>
+        </member>
+        <member name="M:Contoso.Gaming.Engine.API.Services.Interfaces.IPlayersLocatorService.FindAllRoutes(System.String,System.String)">
+            <summary>
+            Finds all routes.
+            </summary>
+            <param name="source">The source.</param>
+            <param name="destination">The destination.</param>
+            <returns>Returns weighted routes.</returns>
+        </member>
+        <member name="M:Contoso.Gaming.Engine.API.Services.Interfaces.IPlayersLocatorService.FindRoutesAlongLandmarks(Contoso.Gaming.Engine.API.Entities.RouteRequestDetails)">
+            <summary>
+            Finds the routes along landmarks.
+            </summary>
+            <param name="routeRequestDetails">The route request details.</param>
+            <returns>Returns weighted routes.</returns>
+        </member>
+        <member name="M:Contoso.Gaming.Engine.API.Services.Interfaces.IPlayersLocatorService.FindAllRoutesWithHops(System.String,System.String,System.Int32)">
+            <summary>
+            Finds all routes with hops.
+            </summary>
+            <param name="source">The source.</param>
+            <param name="destination">The destination.</param>
+            <param name="hops">The hops.</param>
+            <returns>Returns weighted routes.</returns>
+        </member>
+        <member name="T:Contoso.Gaming.Engine.API.Services.PlayersLocatorService">
+            <summary>
+            The Players Locator Service.
+            </summary>
+            <seealso cref="T:Contoso.Gaming.Engine.API.Services.Interfaces.IPlayersLocatorService" />
+        </member>
+        <member name="F:Contoso.Gaming.Engine.API.Services.PlayersLocatorService.graph">
+            <summary>
+            The graph.
+            </summary>
+        </member>
+        <member name="F:Contoso.Gaming.Engine.API.Services.PlayersLocatorService.graphEdges">
+            <summary>
+            The graph edges.
+            </summary>
+        </member>
+        <member name="F:Contoso.Gaming.Engine.API.Services.PlayersLocatorService.graphVertices">
+            <summary>
+            The graph vertices.
+            </summary>
+        </member>
+        <member name="F:Contoso.Gaming.Engine.API.Services.PlayersLocatorService.vertices">
+            <summary>
+            The vertices.
+            </summary>
+        </member>
+        <member name="F:Contoso.Gaming.Engine.API.Services.PlayersLocatorService.edges">
+            <summary>
+            The edges.
+            </summary>
+        </member>
+        <member name="F:Contoso.Gaming.Engine.API.Services.PlayersLocatorService.graphService">
+            <summary>
+            The graph service.
+            </summary>
+        </member>
+        <member name="M:Contoso.Gaming.Engine.API.Services.PlayersLocatorService.#ctor(Contoso.Gaming.Engine.API.Services.Interfaces.IGraphService)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Contoso.Gaming.Engine.API.Services.PlayersLocatorService"/> class.
+            </summary>
+            <param name="graphService">The graph service.</param>
+        </member>
+        <member name="M:Contoso.Gaming.Engine.API.Services.PlayersLocatorService.FindAllRoutes(System.String,System.String)">
+            <summary>
+            Finds all routes.
+            </summary>
+            <param name="source">The source.</param>
+            <param name="destination">The destination.</param>
+            <returns>
+            Returns weighted routes.
+            </returns>
+        </member>
+        <member name="M:Contoso.Gaming.Engine.API.Services.PlayersLocatorService.FindRoutesAlongLandmarks(Contoso.Gaming.Engine.API.Entities.RouteRequestDetails)">
+            <summary>
+            Finds the routes along landmarks.
+            </summary>
+            <param name="routeRequestDetails">The route request details.</param>
+            <returns>
+            Returns weighted routes.
+            </returns>
+        </member>
+        <member name="M:Contoso.Gaming.Engine.API.Services.PlayersLocatorService.FindAllRoutesWithHops(System.String,System.String,System.Int32)">
+            <summary>
+            Finds all routes with hops.
+            </summary>
+            <param name="source">The source.</param>
+            <param name="destination">The destination.</param>
+            <param name="hops">The hops.</param>
+            <returns>
+            Returns weighted routes.
+            </returns>
+        </member>
+        <member name="M:Contoso.Gaming.Engine.API.Services.PlayersLocatorService.ValidateHops(System.Int32)">
+            <summary>
+            Validates the hops.
+            </summary>
+            <param name="hops">The hops.</param>
+            <exception cref="T:System.ArgumentException">Hops cannot be negative.</exception>
+        </member>
+        <member name="M:Contoso.Gaming.Engine.API.Services.PlayersLocatorService.MapModel(System.Collections.Generic.List{System.String})">
+            <summary>
+            Maps the model.
+            </summary>
+            <param name="result">The result.</param>
+            <returns>Returns list of weighted routes model.</returns>
+        </member>
+        <member name="M:Contoso.Gaming.Engine.API.Services.PlayersLocatorService.ValidateRouteRequestDetails(Contoso.Gaming.Engine.API.Entities.RouteRequestDetails)">
+            <summary>
+            Validates the route request details.
+            </summary>
+            <param name="routeRequestDetails">The route request details.</param>
+            <exception cref="T:System.ArgumentException">
+            Landmarks cannot be null or empty
+            or
+            Landmark: {landmark} not found in the graph.
+            </exception>
+        </member>
+        <!-- Badly formed XML comment ignored for member "M:Contoso.Gaming.Engine.API.Services.PlayersLocatorService.ValidateInputs(System.String,System.String)" -->
+        <member name="T:Contoso.Gaming.Engine.API.Setup.ServiceConfiguration">
+            <summary>
+            The Service Configuration.
+            </summary>
+        </member>
         <member name="M:Contoso.Gaming.Engine.API.Setup.ServiceConfiguration.ConfigureProblemDetailsMiddleware(Microsoft.Extensions.DependencyInjection.IServiceCollection,Microsoft.AspNetCore.Hosting.IWebHostEnvironment)">
             <summary>
             Configures the problem details middleware.
@@ -164,6 +656,26 @@
             </summary>
             <param name="services">The services.</param>
         </member>
+        <member name="T:Contoso.Gaming.Engine.API.Startup">
+            <summary>
+            The Startup.
+            </summary>
+        </member>
+        <member name="M:Contoso.Gaming.Engine.API.Startup.#ctor(Microsoft.Extensions.Configuration.IConfiguration,Microsoft.AspNetCore.Hosting.IWebHostEnvironment)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Contoso.Gaming.Engine.API.Startup"/> class.
+            </summary>
+            <param name="configuration">The configuration.</param>
+            <param name="env">The env.</param>
+        </member>
+        <member name="P:Contoso.Gaming.Engine.API.Startup.Configuration">
+            <summary>
+            Gets the configuration.
+            </summary>
+            <value>
+            The configuration.
+            </value>
+        </member>
         <member name="P:Contoso.Gaming.Engine.API.Startup.CurrentEnvironment">
             <summary>
             Gets the current environment.
@@ -172,17 +684,48 @@
             The current environment.
             </value>
         </member>
+        <member name="M:Contoso.Gaming.Engine.API.Startup.ConfigureServices(Microsoft.Extensions.DependencyInjection.IServiceCollection)">
+            <summary>
+            Configures the services.
+            </summary>
+            <param name="services">The services.</param>
+        </member>
+        <member name="M:Contoso.Gaming.Engine.API.Startup.Configure(Microsoft.AspNetCore.Builder.IApplicationBuilder,Microsoft.AspNetCore.Hosting.IWebHostEnvironment)">
+            <summary>
+            Configures the specified application.
+            </summary>
+            <param name="app">The application.</param>
+            <param name="env">The env.</param>
+        </member>
+        <member name="T:Contoso.Gaming.Engine.API.Utilities.ApiHelper">
+            <summary>
+            The Api Helper.
+            </summary>
+        </member>
         <member name="M:Contoso.Gaming.Engine.API.Utilities.ApiHelper.GetProblemDetailsTypeUrl(System.Int32)">
             <summary>
             Gets the problem details type URL.
             </summary>
             <param name="httpStatusCode">The HTTP status code.</param>
-            <returns>The type.</returns>
+            <returns>
+            The type.
+            </returns>
         </member>
-        <member name="F:Contoso.Gaming.Engine.API.Utilities.APIMessageConstant.PathNotFoundMessage">
+        <member name="T:Contoso.Gaming.Engine.API.Utilities.APIMessageConstants">
+            <summary>
+            The API message constants.
+            </summary>
+        </member>
+        <member name="F:Contoso.Gaming.Engine.API.Utilities.APIMessageConstants.PathNotFoundMessage">
             <summary>
             The name exists.
             </summary>
+        </member>
+        <member name="T:Contoso.Gaming.Engine.API.Utilities.EnumSchemaFilter">
+            <summary>
+            The Enum Schema Filter.
+            </summary>
+            <seealso cref="T:Swashbuckle.AspNetCore.SwaggerGen.ISchemaFilter" />
         </member>
         <member name="M:Contoso.Gaming.Engine.API.Utilities.EnumSchemaFilter.Apply(Microsoft.OpenApi.Models.OpenApiSchema,Swashbuckle.AspNetCore.SwaggerGen.SchemaFilterContext)">
             <summary>
@@ -191,19 +734,28 @@
             <param name="model">The model.</param>
             <param name="context">The context.</param>
         </member>
+        <member name="T:Contoso.Gaming.Engine.API.Utilities.SwaggerServiceExtensions">
+            <summary>
+            The Swagger Service Extension.
+            </summary>
+        </member>
         <member name="M:Contoso.Gaming.Engine.API.Utilities.SwaggerServiceExtensions.AddSwaggerDocumentation(Microsoft.Extensions.DependencyInjection.IServiceCollection)">
             <summary>
             Adds the swagger documentation.
             </summary>
             <param name="services">The services.</param>
-            <returns>The service collection.</returns>
+            <returns>
+            The service collection.
+            </returns>
         </member>
         <member name="M:Contoso.Gaming.Engine.API.Utilities.SwaggerServiceExtensions.UseSwaggerDocumentation(Microsoft.AspNetCore.Builder.IApplicationBuilder)">
             <summary>
             Uses the swagger documentation.
             </summary>
             <param name="app">The application.</param>
-            <returns>The app builder.</returns>
+            <returns>
+            The app builder.
+            </returns>
         </member>
     </members>
 </doc>

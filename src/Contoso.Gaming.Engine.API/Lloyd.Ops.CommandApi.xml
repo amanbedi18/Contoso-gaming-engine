@@ -1,0 +1,222 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Contoso.Gaming.Engine.API</name>
+    </assembly>
+    <members>
+        <member name="M:Contoso.Gaming.Engine.API.Controllers.V1.RouteController.GetAllRoutes(System.String,System.String)">
+            <summary>
+            Get possible routes from source to destination.
+            </summary>
+            <remarks>
+            Sample request:
+            
+                GET /api/v1/locateplayers/{source}/{destination}
+            </remarks>
+            <param name="source">The source id of the player.</param>
+            <param name="destination">The destination id of the player.</param>
+            <returns>Task <see cref="T:System.Threading.Tasks.Task"/> representing the asynchronous operation.</returns>
+        </member>
+        <member name="M:Contoso.Gaming.Engine.API.Controllers.V1.RouteController.GetRoutesWithHops(System.String,System.String,System.Int32)">
+            <summary>
+            Get possible routes from source to destination with required number of hops.
+            </summary>
+            <remarks>
+            Sample request:
+            
+                GET /api/v1/locateplayers/{source}/{destination}/{hops}
+            </remarks>
+            <param name="source">The source id of the player.</param>
+            <param name="destination">The destination id of the player.</param>
+            <param name="hops">The number of hops.</param>
+            <returns>Task <see cref="T:System.Threading.Tasks.Task"/> representing the asynchronous operation.</returns>
+        </member>
+        <member name="M:Contoso.Gaming.Engine.API.Controllers.V1.RouteController.FindRoutes(Contoso.Gaming.Engine.API.Entities.RouteRequestDetails)">
+            <summary>
+            Post a message to find distance between landmarks via a given route and number of hops (optional).
+            </summary>
+            <remarks>
+            Sample request:
+            
+                POST /api/v1/locateplayers/findroutes
+                {
+                   "source": "A", #source should not be same as destination
+                   "destination": "E"
+                   "landmarks": {  #optional parameter
+                        "B",
+                        "C",
+                        "D"
+                    },
+                    "requiredHops": 3 #optional parameter, defaults to zero if not provided
+                }
+            </remarks>
+            <param name="routeRequestDetails">The route request details.</param>
+            <returns>Task <see cref="T:System.Threading.Tasks.Task"/> representing the asynchronous operation.</returns>
+        </member>
+        <member name="M:Contoso.Gaming.Engine.API.Exceptions.HttpResponseExceptionFilter.OnActionExecuting(Microsoft.AspNetCore.Mvc.Filters.ActionExecutingContext)">
+            <summary>
+            Called before the action executes, after model binding is complete.
+            </summary>
+            <param name="context">The <see cref="T:Microsoft.AspNetCore.Mvc.Filters.ActionExecutingContext" />.</param>
+        </member>
+        <member name="M:Contoso.Gaming.Engine.API.Exceptions.HttpResponseExceptionFilter.OnActionExecuted(Microsoft.AspNetCore.Mvc.Filters.ActionExecutedContext)">
+            <summary>
+            Called after the action executes, before the action result.
+            </summary>
+            <param name="context">The <see cref="T:Microsoft.AspNetCore.Mvc.Filters.ActionExecutedContext" />.</param>
+        </member>
+        <member name="T:Contoso.Gaming.Engine.API.Exceptions.ICustomException">
+            <summary>
+            The Custom Exception interface.
+            </summary>
+        </member>
+        <member name="P:Contoso.Gaming.Engine.API.Exceptions.ICustomException.Detail">
+            <summary>
+            Gets or sets the detail.
+            </summary>
+            <value>
+            The detail.
+            </value>
+        </member>
+        <member name="P:Contoso.Gaming.Engine.API.Exceptions.ICustomException.Title">
+            <summary>
+            Gets or sets the title.
+            </summary>
+            <value>
+            The title.
+            </value>
+        </member>
+        <member name="P:Contoso.Gaming.Engine.API.Exceptions.ICustomException.Instance">
+            <summary>
+            Gets or sets the instance.
+            </summary>
+            <value>
+            The instance.
+            </value>
+        </member>
+        <member name="P:Contoso.Gaming.Engine.API.Exceptions.ICustomException.AdditionalInfo">
+            <summary>
+            Gets or sets the additional information.
+            </summary>
+            <value>
+            The additional information.
+            </value>
+        </member>
+        <member name="T:Contoso.Gaming.Engine.API.Exceptions.NotFoundException">
+            <summary>
+            The not found exception
+            </summary>
+            <seealso cref="T:System.Exception" />
+            <seealso cref="T:Contoso.Gaming.Engine.API.Exceptions.ICustomException" />
+        </member>
+        <member name="M:Contoso.Gaming.Engine.API.Exceptions.NotFoundException.#ctor(System.String,System.String,System.String,System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Contoso.Gaming.Engine.API.Exceptions.NotFoundException"/> class.
+            </summary>
+            <param name="title">The title.</param>
+            <param name="instance">The instance.</param>
+            <param name="detail">The detail.</param>
+            <param name="additionalInfo">The additional information.</param>
+        </member>
+        <member name="P:Contoso.Gaming.Engine.API.Exceptions.NotFoundException.AdditionalInfo">
+            <summary>
+            Gets or sets the additional information.
+            </summary>
+            <value>
+            The additional information.
+            </value>
+        </member>
+        <member name="P:Contoso.Gaming.Engine.API.Exceptions.NotFoundException.Detail">
+            <summary>
+            Gets or sets the detail.
+            </summary>
+            <value>
+            The detail.
+            </value>
+        </member>
+        <member name="P:Contoso.Gaming.Engine.API.Exceptions.NotFoundException.Title">
+            <summary>
+            Gets or sets the title.
+            </summary>
+            <value>
+            The title.
+            </value>
+        </member>
+        <member name="P:Contoso.Gaming.Engine.API.Exceptions.NotFoundException.Instance">
+            <summary>
+            Gets or sets the instance.
+            </summary>
+            <value>
+            The instance.
+            </value>
+        </member>
+        <member name="T:Contoso.Gaming.Engine.API.Exceptions.NotFoundProblem">
+            <summary>
+            The Metadata Store not found problem.
+            </summary>
+            <seealso cref="T:Microsoft.AspNetCore.Mvc.ProblemDetails" />
+        </member>
+        <member name="P:Contoso.Gaming.Engine.API.Exceptions.NotFoundProblem.AdditionalInfo">
+            <summary>
+            Gets or sets the additional information.
+            </summary>
+            <value>
+            The additional information.
+            </value>
+        </member>
+        <member name="M:Contoso.Gaming.Engine.API.Setup.ServiceConfiguration.ConfigureProblemDetailsMiddleware(Microsoft.Extensions.DependencyInjection.IServiceCollection,Microsoft.AspNetCore.Hosting.IWebHostEnvironment)">
+            <summary>
+            Configures the problem details middleware.
+            </summary>
+            <param name="services">The services.</param>
+            <param name="currentEnvironment">The current environment.</param>
+        </member>
+        <member name="M:Contoso.Gaming.Engine.API.Setup.ServiceConfiguration.ConfigureValidationProblemDetailsMiddleware(Microsoft.Extensions.DependencyInjection.IServiceCollection)">
+            <summary>
+            Configures the Validation Problem Details Middleware.
+            </summary>
+            <param name="services">The services.</param>
+        </member>
+        <member name="P:Contoso.Gaming.Engine.API.Startup.CurrentEnvironment">
+            <summary>
+            Gets the current environment.
+            </summary>
+            <value>
+            The current environment.
+            </value>
+        </member>
+        <member name="M:Contoso.Gaming.Engine.API.Utilities.ApiHelper.GetProblemDetailsTypeUrl(System.Int32)">
+            <summary>
+            Gets the problem details type URL.
+            </summary>
+            <param name="httpStatusCode">The HTTP status code.</param>
+            <returns>The type.</returns>
+        </member>
+        <member name="F:Contoso.Gaming.Engine.API.Utilities.APIMessageConstant.PathNotFoundMessage">
+            <summary>
+            The name exists.
+            </summary>
+        </member>
+        <member name="M:Contoso.Gaming.Engine.API.Utilities.EnumSchemaFilter.Apply(Microsoft.OpenApi.Models.OpenApiSchema,Swashbuckle.AspNetCore.SwaggerGen.SchemaFilterContext)">
+            <summary>
+            Applies the specified model.
+            </summary>
+            <param name="model">The model.</param>
+            <param name="context">The context.</param>
+        </member>
+        <member name="M:Contoso.Gaming.Engine.API.Utilities.SwaggerServiceExtensions.AddSwaggerDocumentation(Microsoft.Extensions.DependencyInjection.IServiceCollection)">
+            <summary>
+            Adds the swagger documentation.
+            </summary>
+            <param name="services">The services.</param>
+            <returns>The service collection.</returns>
+        </member>
+        <member name="M:Contoso.Gaming.Engine.API.Utilities.SwaggerServiceExtensions.UseSwaggerDocumentation(Microsoft.AspNetCore.Builder.IApplicationBuilder)">
+            <summary>
+            Uses the swagger documentation.
+            </summary>
+            <param name="app">The application.</param>
+            <returns>The app builder.</returns>
+        </member>
+    </members>
+</doc>

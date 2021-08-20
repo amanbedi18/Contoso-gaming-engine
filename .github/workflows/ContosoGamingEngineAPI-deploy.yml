@@ -1,15 +1,18 @@
-name: CI Build
+name: CD-dev
 on:
   workflow_dispatch:
+  push:
     branches:
-      - main
+      -main
 
 env:
   AZURE_WEBAPP_NAME: ContosoGamingEngineAPI
+  SLN_PATH_API: src
   AZURE_WEBAPP_PACKAGE_PATH: Contoso.Gaming.Engine.API/publish
   AZURE_WEBAPP_PUBLISH_PROFILE: ${{ secrets.ContosoGamingEngineAPI_4ef0 }}
+  APPINSIGHTS_CONN: ${{ secrets.APPINSIGHTSCONN }}
   CONFIGURATION: Release
-  DOTNET_CORE_VERSION: 5.0.x
+  DOTNET_CORE_VERSION: 5.0.100
   WORKING_DIRECTORY: Contoso.Gaming.Engine.API
 jobs:
   build-and-deploy:
@@ -17,60 +20,51 @@ jobs:
     steps:
     - uses: actions/checkout@v2
       with:
-          ref: ${{ github.ref }}
+        ref: ${{ github.ref }}
 
     - name: Setup .NET Core
-      uses: actions/setup-dotnet@v1
+      uses: actions/setup-dotnet@v1.7.2
       with:
         dotnet-version: ${{ env.DOTNET_CORE_VERSION }}
 
-    - name: Install reportgenerator
-        run: dotnet tool install --global dotnet-reportgenerator-globaltool --version 4.8.1
+    -  name: 'Replace Secrets'
+       uses:  microsoft/variable-substitution@v1 
+       with:
+         files: 'src/Contoso.Gaming.Engine.API/appsettings.json'
+       env:
+         ApplicationInsights.ConnectionString: ${{ env.APPINSIGHTS_CONN }}
 
-    - name: Restore dependencies for the packages project
-      run: dotnet restore ${{ env.SLN_PATH_PACKAGES }}
-      
-    - name: Build packages project
-      run: dotnet build ${{ env.SLN_PATH_PACKAGES }} --no-restore
-
-    - name: Test packages
-      run: dotnet test ${{ env.SLN_PATH_PACKAGES }} --logger:trx --results-directory ../TestResults "/p:CollectCoverage=true" "/p:CoverletOutput=../TestResults/" "/p:MergeWith=../TestResults/coverage.json" "/p:CoverletOutputFormat=\"json,cobertura\""  
-
-    - name: dotnet-tests-report-packages
-      uses: zyborg/dotnet-tests-report@v1.4.4
-      with:
-        project_path: ${{ env.SLN_PATH_PACKAGES }}
-        report_name: Packages Unit Test Summary
-        report_title: Packages Unit Test Summary
-        github_token: ${{ secrets.GITHUB_TOKEN }}
-
-    - name: Generate code coverage report for Packages
-      working-directory: ./src/Lloyd.Ops.Services.Core/BuildingBlocks/tests/TestResults
-      run: reportgenerator -reports:./coverage.cobertura.xml -targetdir:./Reports
-
-    - name: Create code coverage report artifact for Packages
-      uses: actions/upload-artifact@v2
-      with:
-        name: unit-test-report-packages
-        path: ./src/Lloyd.Ops.Services.Core/BuildingBlocks/tests/TestResults/Reports
-
-    - name: Restore
-      run: dotnet restore "${{ env.WORKING_DIRECTORY }}"
+    - name: Install dependencies
+      run: dotnet restore ${{ env.SLN_PATH_API }}
 
     - name: Build
-      run: dotnet build "${{ env.WORKING_DIRECTORY }}" --configuration ${{ env.CONFIGURATION }} --no-restore
+      run: dotnet build ${{ env.SLN_PATH_API }} --configuration Release --no-restore
+
     - name: Test
-      run: dotnet test "${{ env.WORKING_DIRECTORY }}" --no-build
-    - name: Publish
-      run: dotnet publish "${{ env.WORKING_DIRECTORY }}" --configuration ${{ env.CONFIGURATION }} --no-build --output "${{ env.AZURE_WEBAPP_PACKAGE_PATH }}"
-    - name: Deploy to Azure WebApp
+      run: dotnet test ${{ env.SLN_PATH_API }} --no-restore --verbosity normal
+      
+    - name: dotnet publish
+      run: |
+        dotnet publish -c Release -o ${{ env.AZURE_WEBAPP_PACKAGE_PATH }} 
+        
+    - name: 'Deploy to Azure WebApp'
       uses: azure/webapps-deploy@v2
       with:
         app-name: ${{ env.AZURE_WEBAPP_NAME }}
-        package: ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
-        publish-profile: ${{ env.AZURE_WEBAPP_PUBLISH_PROFILE }}
+        publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
+        package: './${{ env.AZURE_WEBAPP_PACKAGE_PATH }}'
+
     - name: Publish Artifacts
       uses: actions/upload-artifact@v1.0.0
       with:
         name: webapp
         path: ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
+
+    #- name: Publish
+    #  run: dotnet publish "${{ env.WORKING_DIRECTORY }}" --configuration ${{ env.CONFIGURATION }} --no-build --output "${{ env.AZURE_WEBAPP_PACKAGE_PATH }}"
+    #- name: Deploy to Azure WebApp
+    #  uses: azure/webapps-deploy@v2
+    #  with:
+    #    app-name: ${{ env.AZURE_WEBAPP_NAME }}
+    #    package: ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
+    #    publish-profile: ${{ env.AZURE_WEBAPP_PUBLISH_PROFILE }}

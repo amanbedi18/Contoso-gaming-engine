@@ -3,6 +3,7 @@ using Contoso.Gaming.Engine.API.Entities;
 using Contoso.Gaming.Engine.API.Exceptions;
 using Contoso.Gaming.Engine.API.Models;
 using Contoso.Gaming.Engine.API.Services.Interfaces;
+using Microsoft.ApplicationInsights;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -18,7 +19,7 @@ namespace Contoso.Gaming.Engine.API.Tests
         /// <summary>
         /// The Locate Players Controller.
         /// </summary>
-        private readonly LocatePlayersOnMapController locatePlayersController;
+        private readonly RouteController locatePlayersController;
 
         /// <summary>
         /// The mock players locator service.
@@ -28,7 +29,7 @@ namespace Contoso.Gaming.Engine.API.Tests
         /// <summary>
         /// The mock logger.
         /// </summary>
-        private readonly Mock<ILogger<LocatePlayersOnMapController>> mockLogger;
+        private readonly TelemetryClient mockLogger;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="LocatePlayersControllerTests"/> class.
@@ -40,10 +41,12 @@ namespace Contoso.Gaming.Engine.API.Tests
                 HttpContext = new DefaultHttpContext(),
             };
 
-            this.mockLogger = new Mock<ILogger<LocatePlayersOnMapController>>();
+#pragma warning disable CS0618 // Type or member is obsolete
+            this.mockLogger = new TelemetryClient();
+#pragma warning restore CS0618 // Type or member is obsolete
             this.mockPlayersLocatorService = new Mock<IPlayersLocatorService>();
 
-            this.locatePlayersController = new LocatePlayersOnMapController(this.mockPlayersLocatorService.Object, this.mockLogger.Object)
+            this.locatePlayersController = new RouteController(this.mockPlayersLocatorService.Object, this.mockLogger)
             {
                 ControllerContext = controllerContext,
             };
@@ -77,7 +80,7 @@ namespace Contoso.Gaming.Engine.API.Tests
         {
             this.mockPlayersLocatorService.Setup(x => x.FindRoutesAlongLandmarks(It.IsAny<RouteRequestDetails>())).ReturnsAsync(new List<WeightedRoutesModel>() { new WeightedRoutesModel() { RouteValue = "AED", RouteWeight = 36 } });
 
-            var testresponse = await this.locatePlayersController.FindRoutes(new RouteRequestDetails() { Source = "A", Destination = "D", RequiredHops = 3 }).ConfigureAwait(false);
+            var testresponse = await this.locatePlayersController.FindRoutes(new RouteRequestDetails() { Source = "A", Destination = "D" }).ConfigureAwait(false);
 
             var okobjectResult = Assert.IsType<OkObjectResult>(testresponse);
             var finalReturnedObject = okobjectResult.Value as List<WeightedRoutesModel>;
@@ -107,8 +110,8 @@ namespace Contoso.Gaming.Engine.API.Tests
         [Fact]
         public async Task FindRoutesBetweenPlayersThrowsExceptionTest()
         {
-            this.mockPlayersLocatorService.Setup(x => x.FindRoutesAlongLandmarks(new RouteRequestDetails() { Source = "A", Destination = "B", RequiredHops = 3 })).ReturnsAsync(new List<WeightedRoutesModel>());
-            await Assert.ThrowsAsync<NotFoundException>(async () => await this.locatePlayersController.FindRoutes(new RouteRequestDetails() { Source = "A", Destination = "D", RequiredHops = 3 }).ConfigureAwait(false));
+            this.mockPlayersLocatorService.Setup(x => x.FindRoutesAlongLandmarks(new RouteRequestDetails() { Source = "A", Destination = "B"})).ReturnsAsync(new List<WeightedRoutesModel>());
+            await Assert.ThrowsAsync<NotFoundException>(async () => await this.locatePlayersController.FindRoutes(new RouteRequestDetails() { Source = "A", Destination = "D" }).ConfigureAwait(false));
         }
     }
 }

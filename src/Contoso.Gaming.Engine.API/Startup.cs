@@ -1,27 +1,48 @@
-using Contoso.Gaming.Engine.API.Exceptions;
-using Contoso.Gaming.Engine.API.Services;
-using Contoso.Gaming.Engine.API.Services.Interfaces;
-using Contoso.Gaming.Engine.API.Setup;
-using Contoso.Gaming.Engine.API.Utilities;
-using Hellang.Middleware.ProblemDetails;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
-using System.Diagnostics.CodeAnalysis;
+// -----------------------------------------------------------------------
+// <copyright file="Startup.cs" company="Contoso Gaming">
+// Copyright (c) Contoso Gaming. All rights reserved.
+// </copyright>
+// -----------------------------------------------------------------------
 
 namespace Contoso.Gaming.Engine.API
 {
+    using System.Diagnostics.CodeAnalysis;
+    using Contoso.Gaming.Engine.API.Exceptions;
+    using Contoso.Gaming.Engine.API.Services;
+    using Contoso.Gaming.Engine.API.Services.Interfaces;
+    using Contoso.Gaming.Engine.API.Setup;
+    using Contoso.Gaming.Engine.API.Utilities;
+    using Hellang.Middleware.ProblemDetails;
+    using Microsoft.AspNetCore.Builder;
+    using Microsoft.AspNetCore.Hosting;
+    using Microsoft.AspNetCore.Mvc;
+    using Microsoft.Extensions.Configuration;
+    using Microsoft.Extensions.DependencyInjection;
+    using Microsoft.Extensions.Hosting;
+
+    /// <summary>
+    /// The Startup.
+    /// </summary>
     [ExcludeFromCodeCoverage]
     public class Startup
     {
-        public Startup(IConfiguration configuration)
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Startup"/> class.
+        /// </summary>
+        /// <param name="configuration">The configuration.</param>
+        /// <param name="env">The env.</param>
+        public Startup(IConfiguration configuration, IWebHostEnvironment env)
         {
-            Configuration = configuration;
+            this.Configuration = configuration;
+            this.CurrentEnvironment = env;
         }
 
+        /// <summary>
+        /// Gets the configuration.
+        /// </summary>
+        /// <value>
+        /// The configuration.
+        /// </value>
         public IConfiguration Configuration { get; }
 
         /// <summary>
@@ -32,20 +53,24 @@ namespace Contoso.Gaming.Engine.API
         /// </value>
         public IWebHostEnvironment CurrentEnvironment { get; }
 
-        // This method gets called by the runtime. Use this method to add services to the container.
+        /// <summary>
+        /// Configures the services.
+        /// </summary>
+        /// <param name="services">The services.</param>
         public void ConfigureServices(IServiceCollection services)
         {
             services.ConfigureProblemDetailsMiddleware(this.CurrentEnvironment);
-            services.AddApplicationInsightsTelemetry(Configuration["APPINSIGHTS_CONNECTIONSTRING"]);
+            services.AddApplicationInsightsTelemetry(this.Configuration["APPINSIGHTS_CONNECTIONSTRING"]);
 
             services.AddSingleton<IGraphService, GraphService>();
-            // transient == scope?
+
+            //// transient == scope?
             services.AddScoped<IPlayersLocatorService, PlayersLocatorService>();
 
             services.AddControllers().AddNewtonsoftJson();
 
             services.AddControllers();
-            services.AddControllers(options => options.Filters.Add(new HttpResponseExceptionFilter()));
+            services.AddControllers(options => options.Filters.Add(typeof(HttpResponseExceptionFilter)));
 
             services.AddSwaggerDocumentation();
 
@@ -62,14 +87,18 @@ namespace Contoso.Gaming.Engine.API
             services.ConfigureValidationProblemDetailsMiddleware();
         }
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
+        /// <summary>
+        /// Configures the specified application.
+        /// </summary>
+        /// <param name="app">The application.</param>
+        /// <param name="env">The env.</param>
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             app.UseProblemDetails();
 
             if (env.IsDevelopment())
             {
-                app.UseDeveloperExceptionPage();
+                //// app.UseDeveloperExceptionPage();
                 app.UseSwagger();
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "Contoso.Gaming.Engine.API v1"));
             }
