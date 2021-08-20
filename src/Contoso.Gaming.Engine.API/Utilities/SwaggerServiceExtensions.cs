@@ -1,15 +1,23 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
-using System.IO;
-using System.Linq;
-using System.Reflection;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.OpenApi.Models;
+﻿// -----------------------------------------------------------------------
+// <copyright file="SwaggerServiceExtensions.cs" company="Contoso Gaming">
+// Copyright (c) Contoso Gaming. All rights reserved.
+// </copyright>
+// -----------------------------------------------------------------------
 
 namespace Contoso.Gaming.Engine.API.Utilities
 {
+    using System;
+    using System.Diagnostics.CodeAnalysis;
+    using System.IO;
+    using System.Linq;
+    using System.Reflection;
+    using Microsoft.AspNetCore.Builder;
+    using Microsoft.Extensions.DependencyInjection;
+    using Microsoft.OpenApi.Models;
+
+    /// <summary>
+    /// The Swagger Service Extension.
+    /// </summary>
     [ExcludeFromCodeCoverage]
     public static class SwaggerServiceExtensions
     {
@@ -17,7 +25,9 @@ namespace Contoso.Gaming.Engine.API.Utilities
         /// Adds the swagger documentation.
         /// </summary>
         /// <param name="services">The services.</param>
-        /// <returns>The service collection.</returns>
+        /// <returns>
+        /// The service collection.
+        /// </returns>
         public static IServiceCollection AddSwaggerDocumentation(this IServiceCollection services)
         {
             services.AddSwaggerGen(options =>
@@ -33,7 +43,7 @@ namespace Contoso.Gaming.Engine.API.Utilities
                 options.SchemaFilter<EnumSchemaFilter>();
 
                 options.ResolveConflictingActions(apiDescriptions => apiDescriptions.First());
-                
+
                 //// Set the comments path for the Swagger JSON and UI.
                 string xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
                 string xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
@@ -46,7 +56,9 @@ namespace Contoso.Gaming.Engine.API.Utilities
         /// Uses the swagger documentation.
         /// </summary>
         /// <param name="app">The application.</param>
-        /// <returns>The app builder.</returns>
+        /// <returns>
+        /// The app builder.
+        /// </returns>
         public static IApplicationBuilder UseSwaggerDocumentation(this IApplicationBuilder app)
         {
             app.UseSwagger();

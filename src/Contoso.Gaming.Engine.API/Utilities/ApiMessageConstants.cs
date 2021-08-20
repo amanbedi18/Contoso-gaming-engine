@@ -1,11 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿// -----------------------------------------------------------------------
+// <copyright file="APIMessageConstants.cs" company="Contoso Gaming">
+// Copyright (c) Contoso Gaming. All rights reserved.
+// </copyright>
+// -----------------------------------------------------------------------
 
 namespace Contoso.Gaming.Engine.API.Utilities
 {
-    public static class APIMessageConstant
+    /// <summary>
+    /// The API message constants.
+    /// </summary>
+    public static class APIMessageConstants
     {
         /// <summary>
         /// The name exists.

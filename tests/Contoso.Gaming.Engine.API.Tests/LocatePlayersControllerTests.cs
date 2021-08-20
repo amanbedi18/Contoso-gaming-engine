@@ -3,6 +3,7 @@ using Contoso.Gaming.Engine.API.Entities;
 using Contoso.Gaming.Engine.API.Exceptions;
 using Contoso.Gaming.Engine.API.Models;
 using Contoso.Gaming.Engine.API.Services.Interfaces;
+using Microsoft.ApplicationInsights;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -28,7 +29,7 @@ namespace Contoso.Gaming.Engine.API.Tests
         /// <summary>
         /// The mock logger.
         /// </summary>
-        private readonly Mock<ILogger<RouteController>> mockLogger;
+        private readonly TelemetryClient mockLogger;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="LocatePlayersControllerTests"/> class.
@@ -40,10 +41,10 @@ namespace Contoso.Gaming.Engine.API.Tests
                 HttpContext = new DefaultHttpContext(),
             };
 
-            this.mockLogger = new Mock<ILogger<RouteController>>();
+            this.mockLogger = new TelemetryClient();
             this.mockPlayersLocatorService = new Mock<IPlayersLocatorService>();
 
-            this.locatePlayersController = new RouteController(this.mockPlayersLocatorService.Object, this.mockLogger.Object)
+            this.locatePlayersController = new RouteController(this.mockPlayersLocatorService.Object, this.mockLogger)
             {
                 ControllerContext = controllerContext,
             };

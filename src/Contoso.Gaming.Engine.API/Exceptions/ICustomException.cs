@@ -1,7 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿// -----------------------------------------------------------------------
+// <copyright file="ICustomException.cs" company="Contoso Gaming">
+// Copyright (c) Contoso Gaming. All rights reserved.
+// </copyright>
+// -----------------------------------------------------------------------
 
 namespace Contoso.Gaming.Engine.API.Exceptions
 {

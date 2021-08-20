@@ -1,14 +1,22 @@
-﻿using Microsoft.OpenApi.Any;
-using Microsoft.OpenApi.Models;
-using Swashbuckle.AspNetCore.SwaggerGen;
-using System;
-using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
-using System.Linq;
-using System.Threading.Tasks;
+﻿// -----------------------------------------------------------------------
+// <copyright file="EnumSchemaFilter.cs" company="Contoso Gaming">
+// Copyright (c) Contoso Gaming. All rights reserved.
+// </copyright>
+// -----------------------------------------------------------------------
 
 namespace Contoso.Gaming.Engine.API.Utilities
 {
+    using System;
+    using System.Diagnostics.CodeAnalysis;
+    using System.Linq;
+    using Microsoft.OpenApi.Any;
+    using Microsoft.OpenApi.Models;
+    using Swashbuckle.AspNetCore.SwaggerGen;
+
+    /// <summary>
+    /// The Enum Schema Filter.
+    /// </summary>
+    /// <seealso cref="Swashbuckle.AspNetCore.SwaggerGen.ISchemaFilter" />
     [ExcludeFromCodeCoverage]
     public class EnumSchemaFilter : ISchemaFilter
     {

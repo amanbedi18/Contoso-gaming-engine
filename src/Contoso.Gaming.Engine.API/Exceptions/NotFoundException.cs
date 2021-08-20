@@ -1,14 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿// -----------------------------------------------------------------------
+// <copyright file="NotFoundException.cs" company="Contoso Gaming">
+// Copyright (c) Contoso Gaming. All rights reserved.
+// </copyright>
+// -----------------------------------------------------------------------
 
 namespace Contoso.Gaming.Engine.API.Exceptions
 {
     using System;
 
     /// <summary>
-    /// The not found exception
+    /// The not found exception.
     /// </summary>
     /// <seealso cref="System.Exception" />
     /// <seealso cref="Contoso.Gaming.Engine.API.Exceptions.ICustomException" />

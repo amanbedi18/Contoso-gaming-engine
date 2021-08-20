@@ -1,17 +1,26 @@
-﻿using Contoso.Gaming.Engine.API.Exceptions;
-using Contoso.Gaming.Engine.API.Utilities;
-using Hellang.Middleware.ProblemDetails;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
-using System;
-using System.Diagnostics.CodeAnalysis;
-using System.Net.Mime;
+﻿// -----------------------------------------------------------------------
+// <copyright file="ServiceConfiguration.cs" company="Contoso Gaming">
+// Copyright (c) Contoso Gaming. All rights reserved.
+// </copyright>
+// -----------------------------------------------------------------------
 
 namespace Contoso.Gaming.Engine.API.Setup
 {
+    using System;
+    using System.Diagnostics.CodeAnalysis;
+    using System.Net.Mime;
+    using Contoso.Gaming.Engine.API.Exceptions;
+    using Contoso.Gaming.Engine.API.Utilities;
+    using Hellang.Middleware.ProblemDetails;
+    using Microsoft.AspNetCore.Hosting;
+    using Microsoft.AspNetCore.Http;
+    using Microsoft.AspNetCore.Mvc;
+    using Microsoft.Extensions.DependencyInjection;
+    using Microsoft.Extensions.Hosting;
+
+    /// <summary>
+    /// The Service Configuration.
+    /// </summary>
     [ExcludeFromCodeCoverage]
     public static class ServiceConfiguration
     {

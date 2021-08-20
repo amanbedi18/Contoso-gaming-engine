@@ -1,0 +1,25 @@
+{
+  "$schema": "https://raw.githubusercontent.com/DotNetAnalyzers/StyleCopAnalyzers/master/StyleCop.Analyzers/StyleCop.Analyzers/Settings/stylecop.schema.json",
+  "settings": {
+    "indentation": {
+    },
+    "spacingRules": {
+    },
+    "readabilityRules": {
+    },
+    "orderingRules": {
+    },
+    "namingRules": {
+      "allowedHungarianPrefixes": [ "ui", "db", "js" ]
+    },
+    "maintainabilityRules": {
+    },
+    "layoutRules": {
+    },
+    "documentationRules": {
+      "companyName": "Contoso Gaming",
+      "copyrightText": "Copyright (c) {companyName}. All rights reserved.",
+      "headerDecoration": "-----------------------------------------------------------------------"
+    }
+  }
+}
