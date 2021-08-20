@@ -55,7 +55,7 @@ namespace Contoso.Gaming.Engine.API.Controllers.V1
         /// <remarks>
         /// Sample request:
         /// 
-        ///     GET /api/v1/locateplayers/{source}/{destination}
+        ///     GET /api/v1/locateplayers/A/E
         /// </remarks>
         /// <param name="source">The source id of the player.</param>
         /// <param name="destination">The destination id of the player.</param>
@@ -85,7 +85,7 @@ namespace Contoso.Gaming.Engine.API.Controllers.V1
         /// <remarks>
         /// Sample request:
         /// 
-        ///     GET /api/v1/locateplayers/{source}/{destination}/{hops}
+        ///     GET /api/v1/locateplayers/A/C/2
         /// </remarks>
         /// <param name="source">The source id of the player.</param>
         /// <param name="destination">The destination id of the player.</param>
