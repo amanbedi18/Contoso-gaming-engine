@@ -41,7 +41,9 @@ namespace Contoso.Gaming.Engine.API.Tests
                 HttpContext = new DefaultHttpContext(),
             };
 
+#pragma warning disable CS0618 // Type or member is obsolete
             this.mockLogger = new TelemetryClient();
+#pragma warning restore CS0618 // Type or member is obsolete
             this.mockPlayersLocatorService = new Mock<IPlayersLocatorService>();
 
             this.locatePlayersController = new RouteController(this.mockPlayersLocatorService.Object, this.mockLogger)

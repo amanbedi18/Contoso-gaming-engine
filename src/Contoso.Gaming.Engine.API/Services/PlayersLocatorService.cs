@@ -71,13 +71,13 @@ namespace Contoso.Gaming.Engine.API.Services
         /// <returns>
         /// Returns weighted routes.
         /// </returns>
-        public async Task<IEnumerable<WeightedRoutesModel>> FindAllRoutes(string source, string destination)
+        public Task<IEnumerable<WeightedRoutesModel>> FindAllRoutes(string source, string destination)
         {
             this.ValidateInputs(source, destination);
 
             var result = this.graphService.GetAllPathsWithWeights(graph, source, destination);
             var routes = this.MapModel(result);
-            return routes;
+            return Task.FromResult(routes);
         }
 
         /// <summary>
@@ -87,14 +87,14 @@ namespace Contoso.Gaming.Engine.API.Services
         /// <returns>
         /// Returns weighted routes.
         /// </returns>
-        public async Task<IEnumerable<WeightedRoutesModel>> FindRoutesAlongLandmarks(RouteRequestDetails routeRequestDetails)
+        public Task<IEnumerable<WeightedRoutesModel>> FindRoutesAlongLandmarks(RouteRequestDetails routeRequestDetails)
         {
             this.ValidateInputs(routeRequestDetails.Source, routeRequestDetails.Destination);
             this.ValidateRouteRequestDetails(routeRequestDetails);
             var result = new List<string>();
             result = this.graphService.GetAllPathsWithWeightsviaLandmarks(graph, routeRequestDetails.Source, routeRequestDetails.Destination, routeRequestDetails.Landmarks.ToList());
             var routes = this.MapModel(result);
-            return routes;
+            return Task.FromResult(routes);
         }
 
         /// <summary>
@@ -106,7 +106,7 @@ namespace Contoso.Gaming.Engine.API.Services
         /// <returns>
         /// Returns weighted routes.
         /// </returns>
-        public async Task<IEnumerable<WeightedRoutesModel>> FindAllRoutesWithHops(string source, string destination, int hops)
+        public Task<IEnumerable<WeightedRoutesModel>> FindAllRoutesWithHops(string source, string destination, int hops)
         {
             this.ValidateInputs(source, destination);
             this.ValidateHops(hops);
@@ -120,7 +120,7 @@ namespace Contoso.Gaming.Engine.API.Services
             }
 
             var routes = this.MapModel(result);
-            return routes;
+            return Task.FromResult(routes);
         }
 
         /// <summary>
