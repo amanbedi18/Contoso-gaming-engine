@@ -56,7 +56,7 @@
         </member>
         <member name="M:Contoso.Gaming.Engine.API.Controllers.V1.RouteController.FindRoutes(Contoso.Gaming.Engine.API.Entities.RouteRequestDetails)">
              <summary>
-             Post a message to find distance between landmarks via a given route and number of hops (optional).
+             Post a message to find distance between source and destination via landmarks.
              </summary>
              <remarks>
              Sample request:
@@ -384,7 +384,7 @@
         </member>
         <member name="M:Contoso.Gaming.Engine.API.Services.GraphService.GetAllPathsWithWeightsviaLandmarks(System.Collections.Generic.Dictionary{System.String,System.Collections.Generic.List{Contoso.Gaming.Engine.API.DataStore.Edge}},System.String,System.String,System.Collections.Generic.List{System.String})">
             <summary>
-            Gets all paths with weightsvia landmarks.
+            Gets all paths with weights via landmarks.
             </summary>
             <param name="graph">The graph.</param>
             <param name="src">The source.</param>
@@ -394,7 +394,7 @@
         </member>
         <member name="M:Contoso.Gaming.Engine.API.Services.GraphService.GetAllPathsWithWeightsviaLandmarksandHops(System.Collections.Generic.Dictionary{System.String,System.Collections.Generic.List{Contoso.Gaming.Engine.API.DataStore.Edge}},System.String,System.String,System.Int32)">
             <summary>
-            Gets all paths with weightsvia landmarksand hops.
+            Gets all paths with weights via landmarksand hops.
             </summary>
             <param name="graph">The graph.</param>
             <param name="src">The source.</param>
@@ -415,7 +415,7 @@
         </member>
         <member name="M:Contoso.Gaming.Engine.API.Services.GraphService.getPathsAndWeightsviaLandmarks(System.Collections.Generic.Dictionary{System.String,System.Collections.Generic.List{Contoso.Gaming.Engine.API.DataStore.Edge}},System.String,System.String,System.Collections.Generic.HashSet{System.String},System.Collections.Generic.List{System.String},System.String,System.Int32,System.Collections.Generic.List{System.String},System.Int32)">
             <summary>
-            Gets the paths and weightsvia landmarks.
+            Gets the paths and weights via landmarks.
             </summary>
             <param name="graph">The graph.</param>
             <param name="src">The source.</param>

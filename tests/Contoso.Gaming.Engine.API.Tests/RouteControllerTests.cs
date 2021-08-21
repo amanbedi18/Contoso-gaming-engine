@@ -13,7 +13,7 @@ using Xunit;
 
 namespace Contoso.Gaming.Engine.API.Tests
 {
-    public class LocatePlayersControllerTests
+    public class RouteControllerTests
     {
         /// <summary>
         /// The Locate Players Controller.
@@ -31,9 +31,9 @@ namespace Contoso.Gaming.Engine.API.Tests
         private readonly TelemetryClient mockLogger;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="LocatePlayersControllerTests"/> class.
+        /// Initializes a new instance of the <see cref="RouteControllerTests"/> class.
         /// </summary>
-        public LocatePlayersControllerTests()
+        public RouteControllerTests()
         {
             ControllerContext controllerContext = new()
             {

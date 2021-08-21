@@ -111,7 +111,7 @@ namespace Contoso.Gaming.Engine.API.Controllers.V1
         }
 
         /// <summary>
-        /// Post a message to find distance between landmarks via a given route and number of hops (optional).
+        /// Post a message to find distance between source and destination via landmarks.
         /// </summary>
         /// <remarks>
         /// Sample request:
