@@ -6,7 +6,6 @@
 
 namespace Contoso.Gaming.Engine.API.Services
 {
-    using System;
     using System.Collections.Generic;
     using Contoso.Gaming.Engine.API.DataStore;
     using Contoso.Gaming.Engine.API.Services.Interfaces;
@@ -32,7 +31,7 @@ namespace Contoso.Gaming.Engine.API.Services
         }
 
         /// <summary>
-        /// Gets all paths with weightsvia landmarks.
+        /// Gets all paths with weights via landmarks.
         /// </summary>
         /// <param name="graph">The graph.</param>
         /// <param name="src">The source.</param>
@@ -47,7 +46,7 @@ namespace Contoso.Gaming.Engine.API.Services
         }
 
         /// <summary>
-        /// Gets all paths with weightsvia landmarksand hops.
+        /// Gets all paths with weights via landmarksand hops.
         /// </summary>
         /// <param name="graph">The graph.</param>
         /// <param name="src">The source.</param>
@@ -79,7 +78,7 @@ namespace Contoso.Gaming.Engine.API.Services
         //// 2.	The distance between landmarks via the route A-E-B-C-D.
         //// 3.	The distance between landmarks via the route A-E-D.
         /// <summary>
-        /// Gets the paths and weightsvia landmarks.
+        /// Gets the paths and weights via landmarks.
         /// </summary>
         /// <param name="graph">The graph.</param>
         /// <param name="src">The source.</param>
@@ -94,7 +93,6 @@ namespace Contoso.Gaming.Engine.API.Services
         {
             if (src == dest && idx == landmarks.Count + 1)
             {
-                Console.WriteLine(currentPath);
                 allPaths.Add(currentPath + "@" + weightSoFar);
                 return;
             }
@@ -110,7 +108,7 @@ namespace Contoso.Gaming.Engine.API.Services
                     }
                     else
                     {
-                        this.getPathsAndWeightsviaLandmarks(graph, edge.Nbr, dest, isVisited, allPaths, currentPath + edge.Nbr.ToString(), weightSoFar + edge.Wt, landmarks, idx + 1);
+                        this.getPathsAndWeightsviaLandmarks(graph, edge.Nbr, dest, isVisited, allPaths, currentPath + '-' + edge.Nbr.ToString(), weightSoFar + edge.Wt, landmarks, idx + 1);
                     }
                 }
             }
@@ -134,7 +132,6 @@ namespace Contoso.Gaming.Engine.API.Services
         {
             if (src == dest)
             {
-                Console.WriteLine(currentPath);
                 allPaths.Add(currentPath + "@" + weightSoFar);
                 return;
             }
@@ -144,7 +141,7 @@ namespace Contoso.Gaming.Engine.API.Services
             {
                 if (!isVisited.Contains(edge.Nbr))
                 {
-                    this.getAllPathsWithWeights(graph, edge.Nbr, dest, isVisited, allPaths, currentPath + edge.Nbr.ToString(), weightSoFar + edge.Wt);
+                    this.getAllPathsWithWeights(graph, edge.Nbr, dest, isVisited, allPaths, currentPath + '-' + edge.Nbr.ToString(), weightSoFar + edge.Wt);
                 }
             }
 
@@ -173,7 +170,6 @@ namespace Contoso.Gaming.Engine.API.Services
 
             if (ct == maxHops + 1 && src == dest)
             {
-                Console.WriteLine(currentPath);
                 allPaths.Add(currentPath + "@" + weightSoFar);
                 return;
             }
@@ -183,7 +179,7 @@ namespace Contoso.Gaming.Engine.API.Services
             {
                 if (!isVisited.Contains(edge.Nbr))
                 {
-                    this.getPathsAndWeightsWithGivenHops(graph, edge.Nbr, dest, isVisited, allPaths, currentPath + edge.Nbr.ToString(), weightSoFar + edge.Wt, ct + 1, maxHops);
+                    this.getPathsAndWeightsWithGivenHops(graph, edge.Nbr, dest, isVisited, allPaths, currentPath + '-' + edge.Nbr.ToString(), weightSoFar + edge.Wt, ct + 1, maxHops);
                 }
             }
 

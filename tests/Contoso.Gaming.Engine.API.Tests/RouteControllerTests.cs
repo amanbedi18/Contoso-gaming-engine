@@ -6,7 +6,6 @@ using Contoso.Gaming.Engine.API.Services.Interfaces;
 using Microsoft.ApplicationInsights;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
 using Moq;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -14,7 +13,7 @@ using Xunit;
 
 namespace Contoso.Gaming.Engine.API.Tests
 {
-    public class LocatePlayersControllerTests
+    public class RouteControllerTests
     {
         /// <summary>
         /// The Locate Players Controller.
@@ -32,9 +31,9 @@ namespace Contoso.Gaming.Engine.API.Tests
         private readonly TelemetryClient mockLogger;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="LocatePlayersControllerTests"/> class.
+        /// Initializes a new instance of the <see cref="RouteControllerTests"/> class.
         /// </summary>
-        public LocatePlayersControllerTests()
+        public RouteControllerTests()
         {
             ControllerContext controllerContext = new()
             {

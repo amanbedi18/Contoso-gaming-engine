@@ -44,6 +44,7 @@ namespace Contoso.Gaming.Engine.API.Entities
         /// The landmarks.
         /// </value>
         [JsonProperty("landmarks")]
+        [Required]
         public IEnumerable<string> Landmarks { get; set; }
 
         /// <summary>
@@ -73,6 +74,10 @@ namespace Contoso.Gaming.Engine.API.Entities
                 {
                     validationResults.Add(new ValidationResult($"Source & destination are not required to be included in landmarks", new[] { nameof(this.Landmarks) }));
                 }
+            }
+            else
+            {
+                validationResults.Add(new ValidationResult($"Landmarks cannot be empty", new[] { nameof(this.Landmarks) }));
             }
 
             return validationResults.AsEnumerable();

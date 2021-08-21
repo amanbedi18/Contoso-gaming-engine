@@ -50,7 +50,7 @@ namespace Contoso.Gaming.Engine.API.Controllers.V1
         }
 
         /// <summary>
-        /// Get possible routes from source to destination.
+        /// Get all possible routes with weights from source to destination.
         /// </summary>
         /// <remarks>
         /// Sample request:
@@ -80,7 +80,7 @@ namespace Contoso.Gaming.Engine.API.Controllers.V1
         }
 
         /// <summary>
-        /// Get possible routes from source to destination with required number of hops.
+        /// Get all possible routes with weights from source to destination with required number of maximum hops.
         /// </summary>
         /// <remarks>
         /// Sample request:
@@ -89,7 +89,7 @@ namespace Contoso.Gaming.Engine.API.Controllers.V1
         /// </remarks>
         /// <param name="source">The source id of the player.</param>
         /// <param name="destination">The destination id of the player.</param>
-        /// <param name="hops">The number of hops.</param>
+        /// <param name="hops">The number of maximum hops.</param>
         /// <returns>Task <see cref="Task"/> representing the asynchronous operation.</returns>
         [HttpGet]
         [Route("{source}/{destination}/{hops}")]
@@ -98,7 +98,7 @@ namespace Contoso.Gaming.Engine.API.Controllers.V1
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> GetRoutesWithHops([FromRoute][Required] string source, [FromRoute][Required] string destination, [FromRoute][Required] int hops)
         {
-            this.logger.TrackTrace($"GetRoutesWithHops requested for source: {source}, destination {destination}, with required hops {hops} & trace id: {this.HttpContext.TraceIdentifier}");
+            this.logger.TrackTrace($"GetRoutesWithHops requested for source: {source}, destination {destination}, with required max hops {hops} & trace id: {this.HttpContext.TraceIdentifier}");
             var routes = await this.playersLocatorService.FindAllRoutesWithHops(source, destination, hops).ConfigureAwait(false);
 
             if (!routes.Any())
@@ -111,7 +111,7 @@ namespace Contoso.Gaming.Engine.API.Controllers.V1
         }
 
         /// <summary>
-        /// Post a message to find distance between landmarks via a given route and number of hops (optional).
+        /// Post a message to find distance between source and destination via landmarks.
         /// </summary>
         /// <remarks>
         /// Sample request:
@@ -120,12 +120,11 @@ namespace Contoso.Gaming.Engine.API.Controllers.V1
         ///     {
         ///        "source": "A", #source should not be same as destination
         ///        "destination": "E"
-        ///        "landmarks": {  #optional parameter
+        ///        "landmarks": { #should not start with source and end with destination, only contain landmarks
         ///             "B",
         ///             "C",
         ///             "D"
         ///         },
-        ///         "requiredHops": 3 #optional parameter, defaults to zero if not provided
         ///     }
         /// </remarks>
         /// <param name="routeRequestDetails">The route request details.</param>
@@ -135,7 +134,7 @@ namespace Contoso.Gaming.Engine.API.Controllers.V1
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> FindRoutes(RouteRequestDetails routeRequestDetails)
+        public async Task<IActionResult> FindRoutes([Required] RouteRequestDetails routeRequestDetails)
         {
             this.logger.TrackTrace($"Find routes requested for source: {routeRequestDetails.Source}, destination {routeRequestDetails.Destination}, against landmarks: {routeRequestDetails.Landmarks?.Count()} & trace id: {this.HttpContext.TraceIdentifier}");
 
@@ -143,7 +142,7 @@ namespace Contoso.Gaming.Engine.API.Controllers.V1
 
             if (!routes.Any())
             {
-                throw new NotFoundException(title: "Path not found", instance: this.HttpContext.TraceIdentifier, detail: $"No path found between {routeRequestDetails.Source} & {routeRequestDetails.Destination} via given landmarks and hops.", additionalInfo: APIMessageConstants.PathNotFoundMessage);
+                throw new NotFoundException(title: "Path not found", instance: this.HttpContext.TraceIdentifier, detail: $"No path found between {routeRequestDetails.Source} & {routeRequestDetails.Destination} via given landmarks.", additionalInfo: APIMessageConstants.PathNotFoundMessage);
             }
 
             this.logger.TrackTrace($"Found {routes.Count()} routes for trace id: {this.HttpContext.TraceIdentifier}");

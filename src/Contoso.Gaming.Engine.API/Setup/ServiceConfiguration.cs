@@ -55,8 +55,8 @@ namespace Contoso.Gaming.Engine.API.Setup
                 {
                     Title = exception.Message,
                     Detail = "Exception occured",
-                    Status = StatusCodes.Status400BadRequest,
-                    Type = ApiHelper.GetProblemDetailsTypeUrl(StatusCodes.Status400BadRequest),
+                    Status = StatusCodes.Status500InternalServerError,
+                    Type = ApiHelper.GetProblemDetailsTypeUrl(StatusCodes.Status500InternalServerError),
                     Instance = exception.HelpLink,
                 });
             });
