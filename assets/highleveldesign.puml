@@ -1,0 +1,9 @@
+@startuml
+actor       User as usr
+entity      API as ent
+database    graph as db
+usr -> ent: API request
+ent-> db: To in memory graph
+db-> ent: To controller
+ent-> usr: response
+@enduml

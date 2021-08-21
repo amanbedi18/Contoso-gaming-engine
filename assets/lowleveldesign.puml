@@ -1,0 +1,43 @@
+@startuml
+autonumber
+actor Actor
+control RouteController
+control PlayersLocatorService
+control GraphService
+collections Validations
+control InMemoryGraph
+database graph
+
+Actor-> RouteController: Http Request
+
+activate RouteController
+RouteController --> RouteController: Runs basic validations
+RouteController-> PlayersLocatorService: Calls Service
+
+activate PlayersLocatorService
+
+activate InMemoryGraph
+PlayersLocatorService-> InMemoryGraph: Create OR get in memory graph
+InMemoryGraph --> InMemoryGraph: Validates graph creation parameters
+InMemoryGraph-> graph: in memory graph
+graph-> PlayersLocatorService: returns new graph OR already populated graph
+deactivate InMemoryGraph
+
+activate Validations
+PlayersLocatorService-> Validations: Runs business validations
+Validations-> PlayersLocatorService: Returns validation results
+deactivate Validations
+
+
+activate GraphService
+PlayersLocatorService-> GraphService: Calls Service
+GraphService-> PlayersLocatorService: Returns routes & weights
+PlayersLocatorService --> PlayersLocatorService : Maps to response model
+deactivate GraphService
+
+PlayersLocatorService -> RouteController:Returns response model
+RouteController --> RouteController: Validates response
+deactivate PlayersLocatorService
+RouteController-> Actor: Returns response OR problem details
+deactivate RouteController
+@enduml

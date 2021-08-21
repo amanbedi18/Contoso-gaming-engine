@@ -50,7 +50,7 @@ namespace Contoso.Gaming.Engine.API.Controllers.V1
         }
 
         /// <summary>
-        /// Get possible routes from source to destination.
+        /// Get all possible routes with weights from source to destination.
         /// </summary>
         /// <remarks>
         /// Sample request:
@@ -80,7 +80,7 @@ namespace Contoso.Gaming.Engine.API.Controllers.V1
         }
 
         /// <summary>
-        /// Get possible routes from source to destination with required number of hops.
+        /// Get all possible routes with weights from source to destination with required number of maximum hops.
         /// </summary>
         /// <remarks>
         /// Sample request:
@@ -89,7 +89,7 @@ namespace Contoso.Gaming.Engine.API.Controllers.V1
         /// </remarks>
         /// <param name="source">The source id of the player.</param>
         /// <param name="destination">The destination id of the player.</param>
-        /// <param name="hops">The number of hops.</param>
+        /// <param name="hops">The number of maximum hops.</param>
         /// <returns>Task <see cref="Task"/> representing the asynchronous operation.</returns>
         [HttpGet]
         [Route("{source}/{destination}/{hops}")]
@@ -120,12 +120,11 @@ namespace Contoso.Gaming.Engine.API.Controllers.V1
         ///     {
         ///        "source": "A", #source should not be same as destination
         ///        "destination": "E"
-        ///        "landmarks": {  #optional parameter
+        ///        "landmarks": { #should not start with source and end with destination, only contain landmarks
         ///             "B",
         ///             "C",
         ///             "D"
         ///         },
-        ///         "requiredHops": 3 #optional parameter, defaults to zero if not provided
         ///     }
         /// </remarks>
         /// <param name="routeRequestDetails">The route request details.</param>
@@ -135,7 +134,7 @@ namespace Contoso.Gaming.Engine.API.Controllers.V1
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> FindRoutes(RouteRequestDetails routeRequestDetails)
+        public async Task<IActionResult> FindRoutes([Required] RouteRequestDetails routeRequestDetails)
         {
             this.logger.TrackTrace($"Find routes requested for source: {routeRequestDetails.Source}, destination {routeRequestDetails.Destination}, against landmarks: {routeRequestDetails.Landmarks?.Count()} & trace id: {this.HttpContext.TraceIdentifier}");
 
