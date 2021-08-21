@@ -98,7 +98,7 @@ namespace Contoso.Gaming.Engine.API.Controllers.V1
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> GetRoutesWithHops([FromRoute][Required] string source, [FromRoute][Required] string destination, [FromRoute][Required] int hops)
         {
-            this.logger.TrackTrace($"GetRoutesWithHops requested for source: {source}, destination {destination}, with required hops {hops} & trace id: {this.HttpContext.TraceIdentifier}");
+            this.logger.TrackTrace($"GetRoutesWithHops requested for source: {source}, destination {destination}, with required max hops {hops} & trace id: {this.HttpContext.TraceIdentifier}");
             var routes = await this.playersLocatorService.FindAllRoutesWithHops(source, destination, hops).ConfigureAwait(false);
 
             if (!routes.Any())

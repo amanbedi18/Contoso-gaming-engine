@@ -130,9 +130,9 @@ namespace Contoso.Gaming.Engine.API.Services
         /// <exception cref="System.ArgumentException">Hops cannot be negative.</exception>
         private void ValidateHops(int hops)
         {
-            if (hops < 0)
+            if (hops <= 0)
             {
-                throw new ArgumentException($"Hops cannot be negative.");
+                throw new ArgumentException($"Hops cannot be negative or 0.");
             }
         }
 
@@ -165,11 +165,6 @@ namespace Contoso.Gaming.Engine.API.Services
         /// </exception>
         private void ValidateRouteRequestDetails(RouteRequestDetails routeRequestDetails)
         {
-            if (routeRequestDetails.Landmarks == null || !routeRequestDetails.Landmarks.Any())
-            {
-                throw new ArgumentException($"Landmarks cannot be null or empty");
-            }
-
             foreach (var landmark in routeRequestDetails.Landmarks)
             {
                 if (!graphVertices.Contains(landmark))
@@ -199,7 +194,7 @@ namespace Contoso.Gaming.Engine.API.Services
         {
             if (source == destination)
             {
-                throw new ArgumentException($"Source & destination cannot be the same. Wrong parameter{source}");
+                throw new ArgumentException($"Source & destination cannot be the same. Wrong parameter {source}");
             }
 
             if (string.IsNullOrEmpty(source) || string.IsNullOrEmpty(destination))
